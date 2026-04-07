@@ -144,7 +144,7 @@
     <div class="flex items-center gap-10">
       <a href="#bio"      class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
       <a href="#calendar" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
-      <a href="#videos"   class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Video</a>
+      <a href="#gallery"   class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
       <a href="#contact"  class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
     
@@ -198,10 +198,10 @@
       <!-- Slide 1 -->
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-100 z-10 flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-3xl md:text-4xl font-light italic text-charcoal leading-relaxed">
-          "Un tocco di rara grazia e una potenza espressiva che lascia il segno. Il suo pianismo è pura poesia."
+          "Since the very first encounter I have been uplifted by his playing: not only Fulvio is a very good pianist, with a virtuoso ambition and big repertoire, but he is a very refined musician, always at the service of music."
         </p>
         <p class="font-sans text-xs tracking-widest uppercase text-muted">
-          — Il Sole 24 Ore
+          — Beatrice Rana
         </p>
       </div>
 
@@ -294,94 +294,88 @@
   <!-- DIVIDER -->
   <div class="border-t border-charcoal/10 mx-10 md:mx-20"></div>
 
-  <!-- VIDEOS -->
-  <section id="videos" class="reveal py-28 px-10 md:px-20 max-w-6xl mx-auto">
-    <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-12">Video</p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="video-thumb group cursor-pointer">
-        <div class="aspect-video bg-stone-300 relative overflow-hidden">
-          <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-300 to-stone-500">
-            <svg class="w-10 h-10 text-white/60 group-hover:text-white/90 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </div>
-        <p class="font-serif text-sm font-light text-charcoal mt-3">Chopin — Ballata n. 1 in sol minore</p>
-        <p class="font-sans text-xs text-muted mt-1">Wigmore Hall, Londra · 2025</p>
-      </div>
-      <div class="video-thumb group cursor-pointer">
-        <div class="aspect-video bg-stone-300 relative overflow-hidden">
-          <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-400 to-stone-600">
-            <svg class="w-10 h-10 text-white/60 group-hover:text-white/90 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </div>
-        <p class="font-serif text-sm font-light text-charcoal mt-3">Schubert — Sonata D. 959</p>
-        <p class="font-sans text-xs text-muted mt-1">Konzerthaus, Vienna · 2025</p>
-      </div>
-      <div class="video-thumb group cursor-pointer">
-        <div class="aspect-video bg-stone-300 relative overflow-hidden">
-          <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-200 to-stone-400">
-            <svg class="w-10 h-10 text-white/60 group-hover:text-white/90 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-        </div>
-        <p class="font-serif text-sm font-light text-charcoal mt-3">Ravel — Gaspard de la nuit</p>
-        <p class="font-sans text-xs text-muted mt-1">Salle Gaveau, Parigi · 2024</p>
-      </div>
-    </div>
-  </section>
+<!-- WRAPPER SFONDO UNICO (Contatti + Footer) -->
+<div class="relative overflow-hidden">
+    
+  <!-- Immagine di Sfondo estesa -->
+  <img src="./img4.jpg" alt="..." class="absolute inset-0 w-full h-full object-cover z-0">
 
-  <!-- DIVIDER -->
-  <div class="border-t border-charcoal/10 mx-10 md:mx-20"></div>
+  <!-- Overlay Scuro esteso -->
+  <div class="absolute inset-0 bg-[#151619]/80 z-0"></div>
 
   <!-- CONTACT -->
-  <section id="contact" class="reveal py-28 px-10 md:px-20 max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
-    <div>
-      <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-6">Contatti</p>
-      <h2 class="font-serif text-4xl font-light text-charcoal leading-snug mb-6">Scrivimi</h2>
-      <p class="font-sans text-sm text-charcoal/60 leading-loose mb-4">
-        Per richieste di concerti, collaborazioni artistiche o ufficio stampa, compila il modulo o scrivi direttamente a:
-      </p>
-      <a href="mailto:email@esempio.com" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">fulvionicolosi@gmail.com</a>
-    </div>
-    
-    <!-- Form Contatti -->
-    <form id="contact-form" class="flex flex-col gap-6">
-      <input type="hidden" name="access_key" value="774c9014-043c-4b4b-bf91-0860da78a1bf">
-      <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
-      <div class="grid grid-cols-2 gap-6">
-        <div>
-          <label class="font-sans text-xs tracking-widest uppercase text-muted block mb-1">Nome</label>
-          <input type="text" name="Nome" placeholder="Il tuo nome" required />
-        </div>
-        <div>
-          <label class="font-sans text-xs tracking-widest uppercase text-muted block mb-1">Cognome</label>
-          <input type="text" name="Cognome" placeholder="Il tuo cognome" required />
-        </div>
-      </div>
-      <div>
-        <label class="font-sans text-xs tracking-widest uppercase text-muted block mb-1">Email</label>
-        <input type="email" name="Email" placeholder="email@esempio.com" required />
-      </div>
-      <div>
-        <label class="font-sans text-xs tracking-widest uppercase text-muted block mb-1">Messaggio</label>
-        <textarea name="Messaggio" rows="4" placeholder="Scrivi qui..." required></textarea>
+  <section id="contact" class="reveal relative z-10 py-32 px-10 md:px-20">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-20 items-start">
+      
+      <!-- Testo Info -->
+      <div class="flex flex-col">
+        <p class="font-sans text-xs tracking-ultra uppercase text-cream/60 mb-6">Contatti</p>
+        <h2 class="font-serif text-4xl md:text-5xl font-light text-cream leading-snug mb-6">Scrivimi</h2>
+        <p class="font-sans text-sm text-cream/80 leading-loose mb-4 max-w-md">
+          Per richieste di concerti, collaborazioni artistiche o ufficio stampa, compila il modulo o scrivi direttamente a:
+        </p>
+        <a href="mailto:fulvionicolosi@gmail.com" class="font-sans text-xs tracking-widest uppercase text-cream border-b border-cream/30 hover:border-cream pb-0.5 transition-colors w-max">fulvionicolosi@gmail.com</a>
       </div>
       
-      <div>
-        <button type="submit" id="submit-button" class="font-sans text-xs tracking-ultra uppercase text-cream bg-charcoal px-8 py-3 hover:bg-charcoal/80 transition-colors w-full md:w-auto">
-          Invia
-        </button>
-      </div>
-      <p id="form-result" class="font-sans text-xs text-charcoal/70 hidden"></p>
-    </form>
-  </section>
+      <!-- Form Contatti (Stile Chiaro) -->
+      <form id="contact-form" class="flex flex-col gap-6 bg-charcoal/30 backdrop-blur-md p-8 md:p-10 border border-cream/10 rounded-sm">
+        <input type="hidden" name="access_key" value="774c9014-043c-4b4b-bf91-0860da78a1bf">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        
+        <style>
+          /* Override locale per i colori degli input su sfondo scuro */
+          #contact-form input, #contact-form textarea {
+            color: #f5f2ec;
+            border-bottom-color: rgba(245, 242, 236, 0.3);
+          }
+          #contact-form input::placeholder, #contact-form textarea::placeholder {
+            color: rgba(245, 242, 236, 0.5);
+          }
+          #contact-form input:focus, #contact-form textarea:focus {
+            border-bottom-color: #c8a96e;
+          }
+        </style>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div>
+            <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Nome</label>
+            <input type="text" name="Nome" placeholder="Il tuo nome" required />
+          </div>
+          <div>
+            <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Cognome</label>
+            <input type="text" name="Cognome" placeholder="Il tuo cognome" required />
+          </div>
+        </div>
+        <div>
+          <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Email</label>
+          <input type="email" name="Email" placeholder="email@esempio.com" required />
+        </div>
+        <div>
+          <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Messaggio</label>
+          <textarea name="Messaggio" rows="3" placeholder="Scrivi qui..." required></textarea>
+        </div>
+        
+        <div class="mt-4">
+          <button type="submit" id="submit-button" class="font-sans text-xs tracking-ultra uppercase text-charcoal bg-cream px-8 py-3 hover:bg-cream/90 transition-colors w-full">
+            Invia
+          </button>
+        </div>
+        <p id="form-result" class="font-sans text-xs text-cream/70 hidden text-center"></p>
+      </form>
+      
+    </div>
+  </section>  
 
   <!-- FOOTER -->
-  <footer class="border-t border-charcoal/10 mx-10 md:mx-20 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-    <p class="font-sans text-xs text-muted tracking-widest uppercase">© 2026 Fulvio Nicolosi</p>
+  <footer class="relative z-10 border-t border-cream/20 mx-10 md:mx-20 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="font-sans text-xs text-cream/60 tracking-widest uppercase">© 2026 Fulvio Nicolosi</p>
     <div class="flex items-center gap-8">
-      <a href="#" class="font-sans text-xs text-muted tracking-widest uppercase hover:text-charcoal transition-colors">Instagram</a>
-      <a href="#" class="font-sans text-xs text-muted tracking-widest uppercase hover:text-charcoal transition-colors">YouTube</a>
+      <a href="#" class="font-sans text-xs text-cream/60 tracking-widest uppercase hover:text-cream transition-colors">Instagram</a>
+      <a href="#" class="font-sans text-xs text-cream/60 tracking-widest uppercase hover:text-cream transition-colors">YouTube</a>
     </div>
   </footer>
+  
+</div>
 
   <!-- SCRIPT NOTION & INTERACTION -->
   <script>
