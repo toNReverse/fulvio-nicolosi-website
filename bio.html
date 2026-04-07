@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biografia — Fulvio Nicolosi</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            cream: '#f5f2ec',
+            charcoal: '#1a1a18',
+            muted: '#8a8a84',
+            accent: '#c8a96e',
+          },
+          letterSpacing: {
+            widest: '0.25em',
+            ultra: '0.4em',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #f5f2ec; color: #1a1a18; }
+    
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: #1a1a18;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Navbar styling per sfondo chiaro continuo */
+    #navbar {
+      background-color: transparent;
+    }
+    #navbar.scrolled {
+      background-color: rgba(245, 242, 236, 0.98);
+      backdrop-filter: blur(8px);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(26, 26, 24, 0.05);
+    }
+    
+    /* Menu Mobile Aperto */
+    #navbar.menu-open {
+      background-color: transparent !important;
+      border-bottom: none !important;
+    }
+    #navbar.menu-open .text-charcoal { color: #f5f2ec !important; }
+
+    /* Animazione Fade-in tipografica */
+    .fade-in-up {
+      animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-charcoal selection:text-cream">
+  
+  <!-- NAV (Ora con testi scuri di base) -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-8 transition-all duration-300">  
+    <a href="home.html" class="font-serif text-sm tracking-widest uppercase text-charcoal relative z-50 hover:opacity-70 transition-opacity">Fulvio Nicolosi</a>
+    
+    <div class="hidden md:flex items-center gap-10">
+      <a href="home.html" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Home</a>
+      <a href="index.html#calendar" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
+      <a href="index.html#gallery" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
+      <a href="index.html#contact" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+    </div>
+    
+    <button id="mobile-menu-btn" class="md:hidden text-charcoal relative z-50 focus:outline-none" aria-label="Menu">
+      <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Overlay Menu Mobile -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
+      <a href="index.html" class="font-serif text-3xl text-cream hover:text-accent transition-colors">Home</a>
+      <a href="index.html#calendar" class="font-serif text-3xl text-cream hover:text-accent transition-colors">Concerti</a>
+      <a href="index.html#gallery" class="font-serif text-3xl text-cream hover:text-accent transition-colors">Gallery</a>
+      <a href="index.html#contact" class="font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+    </div>
+  </nav>
+
+  <!-- CONTENUTO PRINCIPALE (Stile Editoriale Puro) -->
+  <main class="pt-40 md:pt-30 pb-32 px-6 md:px-12 max-w-4xl mx-auto">
+    
+    <!-- Intestazione -->
+    <header class="mb-20 md:mb-20 fade-in-up">
+      <h1 class="font-serif text-5xl md:text-[5.5rem] font-light text-charcoal leading-none tracking-tight mb-8">
+        Biografia
+      </h1>
+      <div class="w-16 h-px bg-charcoal/30"></div>
+    </header>
+
+    <!-- Testo Biografico -->
+    <article class="flex flex-col gap-10 md:gap-12">
+      
+      <!-- Paragrafo 1: Intro forte -->
+      <p class="font-serif text-2xl md:text-3xl leading-relaxed text-charcoal font-light fade-in-up" style="animation-delay: 0.1s;">
+        Fulvio Nicolosi è considerato uno dei talenti pianistici più interessanti della sua generazione, apprezzato per la sua naturale eleganza e per una ricerca sonora profonda e mai scontata.
+      </p>
+
+      <!-- Paragrafo 2 -->
+      <p class="font-serif text-lg md:text-xl leading-loose text-charcoal/80 font-light fade-in-up" style="animation-delay: 0.2s;">
+        Nato a Catania nel 1990 in una famiglia di musicisti, inizia lo studio del pianoforte in tenera età. Il suo percorso accademico lo porta presto a Roma, dove si diploma con lode e menzione d'onore al Conservatorio di Santa Cecilia sotto la guida attenta di Benedetto Lupo. Fondamentale per il suo sviluppo artistico è stato il successivo incontro con Radu Lupu, con il quale si è perfezionato all'Accademia di Zurigo. Da lui ha assorbito l'importanza dell'ascolto interiore e la cura per il dettaglio timbrico che oggi caratterizzano le sue esecuzioni di Schubert e Brahms.
+      </p>
+
+      <!-- Paragrafo 3 -->
+      <p class="font-serif text-lg md:text-xl leading-loose text-charcoal/80 font-light fade-in-up" style="animation-delay: 0.3s;">
+        La vittoria del Concorso Internazionale di Ginevra ha segnato l'inizio di una carriera internazionale che lo ha visto debuttare nelle sale più prestigiose d'Europa, tra cui la Scala di Milano, il Konzerthaus di Vienna, la Salle Gaveau di Parigi e il Palau de la Música di Barcellona. Ha suonato come solista con orchestre del calibro dell'Orchestra dell'Accademia Nazionale di Santa Cecilia, la Tonhalle Orchester Zürich e la Philharmonia Orchestra di Londra, collaborando con direttori di chiara fama.
+      </p>
+
+      <!-- Paragrafo 4 -->
+      <p class="font-serif text-lg md:text-xl leading-loose text-charcoal/80 font-light fade-in-up" style="animation-delay: 0.4s;">
+        In ambito cameristico collabora regolarmente con artisti di fama internazionale, credendo fortemente nel dialogo musicale come forma di espressione più elevata. Oltre al repertorio classico e romantico, Nicolosi dedica grande attenzione alla musica del ventesimo secolo. 
+      </p>
+
+      <!-- Paragrafo 5 -->
+      <p class="font-serif text-lg md:text-xl leading-loose text-charcoal/80 font-light fade-in-up" style="animation-delay: 0.5s;">
+        Nel 2026 firma un contratto di esclusiva con l'etichetta Decca Classics. Il suo atteso album di debutto, intitolato <em class="italic">Radici</em> e previsto per la primavera del 2027, è interamente dedicato ai compositori italiani del primo Novecento (Casella, Respighi, Malipiero) con l'obiettivo di riportare alla luce un repertorio strumentale ingiustamente trascurato. Attualmente vive a Roma e, quando non è in tournée, si dedica all'insegnamento e alla divulgazione musicale.
+      </p>
+
+    </article>
+
+    <!-- Sezione Download (Tipica per i musicisti) -->
+    <div class="mt-24 pt-16 border-t border-charcoal/10 flex flex-col md:flex-row gap-8 md:gap-16 fade-in-up" style="animation-delay: 0.6s;">
+      
+      <div class="flex flex-col items-start gap-4">
+        <p class="font-sans text-xs tracking-ultra uppercase text-muted">Press Kit</p>
+        <a href="#" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
+          Scarica Biografia Corta (PDF)
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        </a>
+        <a href="#" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
+          Scarica Biografia Lunga (PDF)
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+        </a>
+      </div>
+
+      <div class="flex flex-col items-start gap-4">
+        <p class="font-sans text-xs tracking-ultra uppercase text-muted">Management</p>
+        <p class="font-serif text-lg text-charcoal">Caecilia Agency<br>Geneva, Switzerland</p>
+        <a href="mailto:info@caecilia.ch" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">
+          Contatta il management →
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-charcoal/10 mx-6 md:mx-12 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="font-sans text-xs text-charcoal/60 tracking-widest uppercase text-center md:text-left">© 2026 Fulvio Nicolosi</p>
+    <a href="home.html" class="font-sans text-xs text-charcoal tracking-widest uppercase border-b border-transparent hover:border-charcoal pb-0.5 transition-colors">
+      Torna alla Home
+    </a>
+  </footer>
+
+  <script>
+    // Gestione Menu Mobile
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navbar = document.getElementById('navbar');
+    const menuIconPath = mobileMenuBtn.querySelector('path');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isClosed = mobileMenu.classList.contains('opacity-0');
+      
+      if (isClosed) {
+        mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+        navbar.classList.add('menu-open');
+        menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        // Forza il colore chiaro dell'icona quando il menu scuro è aperto
+        mobileMenuBtn.classList.replace('text-charcoal', 'text-cream');
+      } else {
+        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+        navbar.classList.remove('menu-open');
+        menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+        // Rimetti il colore scuro
+        mobileMenuBtn.classList.replace('text-cream', 'text-charcoal');
+      }
+    });
+
+    // Effetto Scroll sulla Navbar
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>
