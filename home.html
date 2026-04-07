@@ -153,6 +153,22 @@
     #navbar.menu-open .text-white {
       color: #f5f2ec !important;
     }
+    /* Navbar Dark Scroll Effect (per l'ultima sezione) */
+    #navbar.scrolled-dark {
+      background-color: rgba(21, 22, 25, 0.95); /* Colore #151619 con 95% di opacità */
+      backdrop-filter: blur(8px);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(245, 242, 236, 0.05); /* Bordo chiaro leggerissimo */
+    }
+    /* Mantiene il testo bianco/crema quando la navbar è scura */
+    #navbar.scrolled-dark .text-white {
+      color: #f5f2ec !important; 
+    }
+    /* Adatta il colore della linea di hover dei link */
+    #navbar.scrolled-dark .nav-link::after {
+      background: #f5f2ec;
+    }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -428,11 +444,30 @@
     });
 
     // --- NAV SCROLL EFFECT ---
+// --- NAV SCROLL EFFECT ---
+const contactSection = document.getElementById('contact');
+    // Selezioniamo il contenitore padre che ha effettivamente lo sfondo scuro
+    const darkSectionWrapper = contactSection.parentElement;
+
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
+      // Calcola l'altezza dinamica della navbar
+      const navHeight = navbar.offsetHeight;
+      // Misura la distanza della sezione scura dal bordo superiore dello schermo
+      const darkSectionTop = darkSectionWrapper.getBoundingClientRect().top;
+
+      // Se il bordo superiore della sezione scura tocca o supera la navbar
+      if (darkSectionTop <= navHeight) {
+        navbar.classList.add('scrolled-dark');
         navbar.classList.remove('scrolled');
+      } 
+      // Altrimenti, se stiamo semplicemente scrollando la pagina
+      else if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+        navbar.classList.remove('scrolled-dark');
+      } 
+      // Se siamo in cima alla pagina
+      else {
+        navbar.classList.remove('scrolled', 'scrolled-dark');
       }
     });
 
