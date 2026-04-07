@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fulvio Nicolosi — Pianista</title>
   
-  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
   
-  <!-- Tailwind Configuration -->
   <script>
     tailwind.config = {
       theme: {
@@ -36,7 +33,6 @@
       }
     }
   </script>
-  <!-- Custom CSS -->
   <style>
     html { scroll-behavior: smooth; }
     body { background-color: #f5f2ec; color: #1a1a18; }
@@ -98,7 +94,7 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #f5f2ec; }
     ::-webkit-scrollbar-thumb { background: #c8a96e; }
-    /* Forms */
+    /* Forms Base */
     input, textarea {
       outline: none;
       background: transparent;
@@ -112,6 +108,19 @@
     }
     input::placeholder, textarea::placeholder { color: #8a8a84; }
     input:focus, textarea:focus { border-bottom-color: #c8a96e; }
+    
+    /* Override per i colori degli input su sfondo scuro (Sezione Contatti) */
+    #contact-form input, #contact-form textarea {
+      color: #f5f2ec;
+      border-bottom-color: rgba(245, 242, 236, 0.3);
+    }
+    #contact-form input::placeholder, #contact-form textarea::placeholder {
+      color: rgba(245, 242, 236, 0.5);
+    }
+    #contact-form input:focus, #contact-form textarea:focus {
+      border-bottom-color: #c8a96e;
+    }
+
     /* Skeleton Loading Animation */
     @keyframes shimmer {
       0%   { opacity: 0.4; }
@@ -137,7 +146,6 @@
   </style>
 </head>
 <body class="font-sans antialiased">
-  <!-- NAV -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-6 transition-all duration-300">  
     <a href="#" class="font-serif text-sm tracking-widest uppercase text-white">Fulvio Nicolosi</a>
     
@@ -158,7 +166,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="relative h-screen overflow-hidden">
     <img src="./img2.jpg" alt="Fulvio Nicolosi - Italian Pianist" class="absolute inset-0 w-full h-full object-cover object-center">
     <div class="absolute inset-0 bg-charcoal/40"></div>
@@ -183,19 +190,14 @@
     </div>
   </section>
 
-  <!-- PRESS / QUOTES (SLIDER CON FRECCE) -->
   <section id="press" class="reveal py-28 px-4 md:px-10 max-w-6xl mx-auto relative h-[450px] flex flex-col items-center justify-center">
     
-    <!-- Freccia Sinistra -->
     <button onclick="prevSlide()" class="absolute left-2 md:left-10 top-1/2 -translate-y-1/2 p-2 text-charcoal/30 hover:text-charcoal transition-colors z-20 focus:outline-none" aria-label="Citazione precedente">
-      <!-- SVG con stroke-width=1 per un look molto sottile e raffinato -->
       <svg class="w-10 h-10 md:w-16 md:h-16" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
     </button>
 
-    <!-- Contenitore Citazioni -->
     <div class="relative w-full max-w-3xl h-full flex items-center justify-center px-12 md:px-0">
       
-      <!-- Slide 1 -->
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-100 z-10 flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-3xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Since the very first encounter I have been uplifted by his playing: not only Fulvio is a very good pianist, with a virtuoso ambition and big repertoire, but he is a very refined musician, always at the service of music."
@@ -205,7 +207,6 @@
         </p>
       </div>
 
-      <!-- Slide 2 -->
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-0 z-0 pointer-events-none flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-3xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Fulvio brought his transcendental mastery to full use as he played with a fearless abandon and youthful mastery that was breathtaking."
@@ -215,7 +216,6 @@
         </p>
       </div>
 
-      <!-- Slide 3 -->
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-0 z-0 pointer-events-none flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-3xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Nicolosi ha lasciato un segno particolare grazie alla proposta delle rare chansons Trenet/Weissenberg, interpretate dal talento catanese con virtuosismo e affascinante sprezzatura"
@@ -227,12 +227,10 @@
       
     </div>
 
-    <!-- Freccia Destra -->
     <button onclick="nextSlide()" class="absolute right-2 md:right-10 top-1/2 -translate-y-1/2 p-2 text-charcoal/30 hover:text-charcoal transition-colors z-20 focus:outline-none" aria-label="Citazione successiva">
       <svg class="w-10 h-10 md:w-16 md:h-16" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
     </button>
 
-    <!-- Controlli Slider (Pallini) -->
     <div class="absolute bottom-10 flex gap-3 z-20">
       <button class="quote-dot w-2 h-2 rounded-full bg-charcoal transition-colors" onclick="goToSlide(0)"></button>
       <button class="quote-dot w-2 h-2 rounded-full bg-charcoal/20 hover:bg-charcoal/50 transition-colors" onclick="goToSlide(1)"></button>
@@ -240,10 +238,8 @@
     </div>
   </section>
 
-  <!-- DIVIDER -->
   <div class="border-t border-charcoal/10 mx-10 md:mx-20"></div>
 
-  <!-- BIOGRAPHY -->
   <section id="bio" class="reveal py-28 bg-[#151619]">
     <div class="px-10 md:px-20 max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-start">
       <div>
@@ -263,14 +259,11 @@
     </div>
   </section>
   
-  <!-- DIVIDER -->
   <div class="border-t border-charcoal/10 mx-10 md:mx-20"></div>
 
-  <!-- CALENDAR -->
   <section id="calendar" class="reveal py-28 px-10 md:px-20 max-w-6xl mx-auto">
     <p class="font-sans text-sm tracking-ultra uppercase text-muted mb-12">Prossimi concerti</p>
     <div id="concerts-list" class="flex flex-col divide-y divide-charcoal/10">
-      <!-- Skeletons -->
       <div class="concert-skeleton py-7 grid grid-cols-12 gap-4 items-center">
         <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
         <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-64"></div><div class="skeleton h-3 w-40"></div></div>
@@ -282,7 +275,6 @@
         <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
       </div>
     </div>
-    <!-- Error state -->
     <div id="concerts-error" class="hidden py-8">
       <p class="font-sans text-sm text-muted">Non è stato possibile caricare i concerti. Riprova più tardi.</p>
     </div>
@@ -291,23 +283,17 @@
     </div>
   </section>
 
-  <!-- DIVIDER -->
   <div class="border-t border-charcoal/10 mx-10 md:mx-20"></div>
 
-<!-- WRAPPER SFONDO UNICO (Contatti + Footer) -->
 <div class="relative overflow-hidden">
     
-  <!-- Immagine di Sfondo estesa -->
   <img src="./img4.jpg" alt="..." class="absolute inset-0 w-full h-full object-cover z-0">
 
-  <!-- Overlay Scuro esteso -->
   <div class="absolute inset-0 bg-[#151619]/80 z-0"></div>
 
-  <!-- CONTACT -->
   <section id="contact" class="reveal relative z-10 py-32 px-10 md:px-20">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-20 items-start">
       
-      <!-- Testo Info -->
       <div class="flex flex-col">
         <p class="font-sans text-xs tracking-ultra uppercase text-cream/60 mb-6">Contatti</p>
         <h2 class="font-serif text-4xl md:text-5xl font-light text-cream leading-snug mb-6">Scrivimi</h2>
@@ -317,24 +303,9 @@
         <a href="mailto:fulvionicolosi@gmail.com" class="font-sans text-xs tracking-widest uppercase text-cream border-b border-cream/30 hover:border-cream pb-0.5 transition-colors w-max">fulvionicolosi@gmail.com</a>
       </div>
       
-      <!-- Form Contatti (Stile Chiaro) -->
       <form id="contact-form" class="flex flex-col gap-6 bg-charcoal/30 backdrop-blur-md p-8 md:p-10 border border-cream/10 rounded-sm">
         <input type="hidden" name="access_key" value="774c9014-043c-4b4b-bf91-0860da78a1bf">
         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
-        
-        <style>
-          /* Override locale per i colori degli input su sfondo scuro */
-          #contact-form input, #contact-form textarea {
-            color: #f5f2ec;
-            border-bottom-color: rgba(245, 242, 236, 0.3);
-          }
-          #contact-form input::placeholder, #contact-form textarea::placeholder {
-            color: rgba(245, 242, 236, 0.5);
-          }
-          #contact-form input:focus, #contact-form textarea:focus {
-            border-bottom-color: #c8a96e;
-          }
-        </style>
 
         <div class="grid grid-cols-2 gap-6">
           <div>
@@ -366,7 +337,6 @@
     </div>
   </section>  
 
-  <!-- FOOTER -->
   <footer class="relative z-10 border-t border-cream/20 mx-10 md:mx-20 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
     <p class="font-sans text-xs text-cream/60 tracking-widest uppercase">© 2026 Fulvio Nicolosi</p>
     <div class="flex items-center gap-8">
@@ -377,7 +347,6 @@
   
 </div>
 
-  <!-- SCRIPT NOTION & INTERACTION -->
   <script>
     const NOTION_DATABASE = '3389968051328094844cfd5b4e8af7fa';
     const WORKER_URL      = 'https://shiny-band-f5c9.mark04social.workers.dev';
@@ -593,4 +562,4 @@
     resetInterval();
   </script>
 </body>
-</html> 
+</html>
