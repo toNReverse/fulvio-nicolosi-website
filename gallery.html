@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fulvio Nicolosi — Gallery</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans:  ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            cream:   '#f5f2ec',
+            charcoal:'#1a1a18',
+            muted:   '#8a8a84',
+            accent:  '#c8a96e',
+          },
+          letterSpacing: {
+            widest: '0.25em',
+            ultra:  '0.4em',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #f5f2ec; color: #1a1a18; }
+
+    nav { animation: fadeDown 0.8s ease both; }
+    @keyframes fadeDown {
+      from { opacity:0; transform:translateY(-12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:1px; background:#1a1a18;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover::after { width:100%; }
+
+    #navbar.scrolled {
+      background-color: rgba(245,242,236,0.95);
+      backdrop-filter: blur(8px);
+      padding-top: 1rem; padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(26,26,24,0.06);
+    }
+
+    .reveal {
+      opacity:0; transform:translateY(24px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    .grid-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .grid-item.visible { opacity:1; transform:translateY(0); }
+
+    .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+    .photo-grid::after {
+      content: '';
+      flex-grow: 999;
+      min-width: 30%;
+    }
+
+    .photo-cell {
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+      background: rgba(26,26,24,0.05);
+      height: 40vh;
+      flex-grow: 1;
+    }
+    .photo-cell.aspect-portrait  { flex-basis: 25%; }
+    .photo-cell.aspect-landscape { flex-basis: 40%; }
+    .photo-cell.aspect-square    { flex-basis: 33%; }
+
+    .photo-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: none;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.5s ease;
+      display: block;
+    }
+    .photo-cell:hover img { transform: scale(1.04); }
+    .photo-cell .caption {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,26,24,0.85) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      display: flex; align-items: flex-end; padding: 20px;
+    }
+    .photo-cell:hover .caption { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .photo-cell { height: 30vh; }
+      .photo-cell.aspect-portrait  { flex-basis: 48%; }
+      .photo-cell.aspect-landscape { flex-basis: 100%; }
+    }
+
+    #lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(245,242,236,0.97);
+      align-items: center; justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #lightbox.open { display: flex; animation: lbIn 0.3s ease both; }
+    @keyframes lbIn { from { opacity:0; } to { opacity:1; } }
+    #lightbox img {
+      max-height: 75vh;
+      max-width: 90vw;
+      object-fit: contain;
+      filter: none;
+      border: none;
+      box-shadow: 0 10px 40px rgba(26,26,24,0.1);
+    }
+    #lightbox-caption { margin-top: 24px; text-align: center; z-index: 10; }
+    #lightbox-close {
+      position: absolute; top: 24px; right: 28px;
+      cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
+    }
+    #lightbox-close:hover { opacity: 1; }
+    #lightbox-prev, #lightbox-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      cursor: pointer; opacity: 0.4; transition: opacity 0.2s;
+    }
+    #lightbox-prev:hover, #lightbox-next:hover { opacity: 1; }
+    #lightbox-prev { left: 24px; }
+    #lightbox-next { right: 24px; }
+
+    .filter-tab {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-bottom: 1px solid transparent;
+      cursor: pointer; color: rgba(26,26,24,0.4);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .filter-tab:hover { color: rgba(26,26,24,0.8); }
+    .filter-tab.active { color: #1a1a18; border-bottom-color: #c8a96e; }
+
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#f5f2ec; }
+    ::-webkit-scrollbar-thumb { background:#c8a96e; }
+
+    #navbar.menu-open { background-color:transparent!important; backdrop-filter:none!important; border-bottom:none!important; }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+  <div id="lightbox" role="dialog" aria-modal="true">
+    <button id="lightbox-close" aria-label="Chiudi">
+      <svg class="w-7 h-7 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <button id="lightbox-prev" aria-label="Precedente">
+      <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="" />
+    <div id="lightbox-caption">
+      <p id="lb-caption-text" class="font-sans text-xs tracking-widest uppercase text-charcoal/80"></p>
+      <p id="lb-counter" class="font-sans text-[10px] text-charcoal/50 mt-2"></p>
+    </div>
+    <button id="lightbox-next" aria-label="Successiva">
+      <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-6 transition-all duration-300">
+    <a href="home.html" class="font-serif text-sm tracking-widest uppercase text-charcoal relative z-50">Fulvio Nicolosi</a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="bio.html"           data-i18n="navBio"      class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="home.html#calendar" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
+      <a href="gallery.html"       data-i18n="navGallery"  class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-100">Gallery</a>
+      <a href="home.html#contact"  data-i18n="navContatti" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+    </div>
+
+    <div class="hidden md:flex items-center gap-4">
+      <!-- Language Switch -->
+      <button id="lang-switch" onclick="toggleLang()" class="font-sans text-[10px] tracking-widest uppercase text-charcoal opacity-60 hover:opacity-100 transition-opacity" aria-label="Cambia lingua">
+        <span id="lang-label">EN</span>
+      </button>
+      <span class="text-charcoal/20 text-xs">|</span>
+      <a href="https://www.instagram.com/fulvio.nicolosi/" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg class="w-4 h-4 text-charcoal opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+    </div>
+
+    <button id="mobile-menu-btn" class="md:hidden text-charcoal relative z-50 focus:outline-none" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-cream flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
+      <a href="bio.html"           data-i18n="navBio"      class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Bio</a>
+      <a href="home.html#calendar" data-i18n="navConcerti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Concerti</a>
+      <a href="gallery.html"       data-i18n="navGallery"  class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Gallery</a>
+      <a href="home.html#contact"  data-i18n="navContatti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Contatti</a>
+      <div class="flex items-center gap-6 mt-8">
+        <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-charcoal/60 hover:text-charcoal transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-charcoal/50 hover:text-charcoal transition-colors mt-2" id="lang-switch-mobile">EN</button>
+    </div>
+  </nav>
+
+  <!-- FILTER TABS -->
+  <header class="pt-32 md:pt-40 pb-10 px-3 md:px-6">
+    <div class="flex flex-row items-end gap-8" style="animation:fadeUp 0.9s 0.1s both">
+      <button class="filter-tab active !text-sm md:!text-base" data-filter="all"     data-i18n="filterAll">Tutto</button>
+      <button class="filter-tab !text-sm md:!text-base"        data-filter="portrait" data-i18n="filterPortrait">Ritratti</button>
+      <button class="filter-tab !text-sm md:!text-base"        data-filter="concert"  data-i18n="filterConcert">Concerti</button>
+    </div>
+  </header>
+
+  <main id="gallery-main" class="px-3 md:px-6 pb-20">
+    <div class="photo-grid">
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Milano, 2024" data-src="./img/img3.jpg">
+        <img src="./img/img3.jpg" alt="Ritratto Milano" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Milano, 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-landscape grid-item" data-category="concert" data-caption="Scala di Milano, 2023" data-src="./img/img5.jpg">
+        <img src="./img/img5.jpg" alt="Scala di Milano" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widets uppercase text-cream/80">Scala di Milano, 2023</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Catania, 2023" data-src="./img/img6.jpg">
+        <img src="./img/img6.jpg" alt="Ritratto Catania" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Catania, 2023</p></div>
+      </div>
+
+      <div class="photo-cell aspect-landscape grid-item" data-category="concert" data-caption="Konzerthaus, Vienna 2023" data-src="./img/img7.jpg">
+        <img src="./img/img7.jpg" alt="Konzerthaus Vienna" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Konzerthaus, Vienna 2023</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Backstage, Barcellona 2024" data-src="./img/img8.jpg">
+        <img src="./img/img8.jpg" alt="Backstage" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Backstage, Barcellona 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-landscape grid-item" data-category="concert" data-caption="Salle Gaveau, Parigi 2024" data-src="./img/img9.jpg">
+        <img src="./img/img9.jpg" alt="Salle Gaveau" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Salle Gaveau, Parigi 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-landscape grid-item" data-category="concert" data-caption="Palau de la Música, 2024" data-src="./img/img10.jpg">
+        <img src="./img/img10.jpg" alt="Palau de la Musica" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Palau de la Música, 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Studio, Roma 2022" data-src="./img/img11.jpg">
+        <img src="./img/img11.jpg" alt="Studio Roma" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Studio, Roma 2022</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Studio, Vienna 2024" data-src="./img/img12.jpg">
+        <img src="./img/img12.jpg" alt="Ritratto Vienna" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Studio, Vienna 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Studio, Vienna 2024" data-src="./img/img13.jpg">
+        <img src="./img/img13.jpg" alt="Ritratto Vienna" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Studio, Vienna 2024</p></div>
+      </div>
+
+      <div class="photo-cell aspect-portrait grid-item" data-category="portrait" data-caption="Studio, Vienna 2024" data-src="./img/img14.jpg">
+        <img src="./img/img14.jpg" alt="Ritratto Vienna" loading="lazy">
+        <div class="caption"><p class="font-sans text-xs tracking-widest uppercase text-cream/80">Studio, Vienna 2024</p></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-charcoal/10 mx-6 md:mx-20 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="font-sans text-xs text-charcoal/40 tracking-widest uppercase text-center md:text-left">© 2026 Fulvio Nicolosi</p>
+  </footer>
+
+  <script>
+    // ── TRANSLATIONS ──
+    const translations = {
+      it: {
+        navBio:        'Bio',
+        navConcerti:   'Concerti',
+        navGallery:    'Gallery',
+        navContatti:   'Contatti',
+        filterAll:     'Tutto',
+        filterPortrait:'Ritratti',
+        filterConcert: 'Concerti',
+        lbClose:       'Chiudi',
+        lbPrev:        'Precedente',
+        lbNext:        'Successiva',
+      },
+      en: {
+        navBio:        'Bio',
+        navConcerti:   'Concerts',
+        navGallery:    'Gallery',
+        navContatti:   'Contact',
+        filterAll:     'All',
+        filterPortrait:'Portraits',
+        filterConcert: 'Concerts',
+        lbClose:       'Close',
+        lbPrev:        'Previous',
+        lbNext:        'Next',
+      }
+    };
+
+    let currentLang = 'it';
+
+    function applyLang(lang) {
+      document.documentElement.lang = lang;
+      const t = translations[lang];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      // Lightbox aria-labels
+      document.getElementById('lightbox-close').setAttribute('aria-label', t.lbClose);
+      document.getElementById('lightbox-prev').setAttribute('aria-label', t.lbPrev);
+      document.getElementById('lightbox-next').setAttribute('aria-label', t.lbNext);
+
+      // Lang button labels (show opposite)
+      const opposite = lang === 'it' ? 'EN' : 'IT';
+      document.getElementById('lang-label').textContent = opposite;
+      const mob = document.getElementById('lang-switch-mobile');
+      if (mob) mob.textContent = opposite;
+
+      // Keep active filter tab visually consistent after lang switch
+      const activeFilter = document.querySelector('.filter-tab.active')?.dataset.filter;
+      if (activeFilter) {
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+          if (tab.dataset.filter === activeFilter) tab.classList.add('active');
+        });
+      }
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'it' ? 'en' : 'it';
+      applyLang(currentLang);
+    }
+
+    // ── Navbar scroll ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Mobile menu ──
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const iconPath = btn.querySelector('path');
+    btn.addEventListener('click', () => {
+      const closed = menu.classList.contains('opacity-0');
+      if (closed) {
+        menu.classList.remove('opacity-0','pointer-events-none');
+        navbar.classList.add('menu-open');
+        iconPath.setAttribute('d','M6 18L18 6M6 6l12 12');
+      } else {
+        menu.classList.add('opacity-0','pointer-events-none');
+        navbar.classList.remove('menu-open');
+        iconPath.setAttribute('d','M4 6h16M4 12h16M4 18h16');
+      }
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      menu.classList.add('opacity-0','pointer-events-none');
+      navbar.classList.remove('menu-open');
+      iconPath.setAttribute('d','M4 6h16M4 12h16M4 18h16');
+    }));
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => revObs.observe(el));
+
+    // ── Grid items stagger ──
+    const gridItems = document.querySelectorAll('.grid-item');
+    const itemObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const siblings = Array.from(e.target.parentElement.querySelectorAll('.grid-item'));
+          const idx = siblings.indexOf(e.target);
+          setTimeout(() => e.target.classList.add('visible'), idx * 80);
+          itemObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    gridItems.forEach(el => itemObs.observe(el));
+
+    // ── Filter tabs ──
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        document.querySelectorAll('.photo-cell').forEach(cell => {
+          cell.style.display = (filter === 'all' || cell.dataset.category === filter) ? '' : 'none';
+        });
+      });
+    });
+
+    // ── Lightbox ──
+    const lightbox  = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lightbox-img');
+    const lbCaption = document.getElementById('lb-caption-text');
+    const lbCounter = document.getElementById('lb-counter');
+
+    let photoCells     = [];
+    let currentLbIndex = 0;
+
+    function openLightbox(index) {
+      currentLbIndex = index;
+      const cell = photoCells[index];
+      lbImg.src = cell.dataset.src || cell.querySelector('img').src;
+      lbImg.alt = cell.querySelector('img').alt;
+      lbCaption.textContent = cell.dataset.caption || '';
+      lbCounter.textContent = `${index + 1} / ${photoCells.length}`;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.photo-cell').forEach(cell => {
+      cell.addEventListener('click', () => {
+        photoCells = Array.from(document.querySelectorAll('.photo-cell')).filter(c => c.style.display !== 'none');
+        const index = photoCells.indexOf(cell);
+        if (index > -1) openLightbox(index);
+      });
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openLightbox((currentLbIndex - 1 + photoCells.length) % photoCells.length);
+    });
+    document.getElementById('lightbox-next').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openLightbox((currentLbIndex + 1) % photoCells.length);
+    });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape')     closeLightbox();
+      if (e.key === 'ArrowLeft')  document.getElementById('lightbox-prev').click();
+      if (e.key === 'ArrowRight') document.getElementById('lightbox-next').click();
+    });
+  </script>
+</body>
+</html>

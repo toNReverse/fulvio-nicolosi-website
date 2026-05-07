@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concerts — Fulvio Nicolosi</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans:  ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            cream:   '#f5f2ec',
+            charcoal:'#1a1a18',
+            muted:   '#8a8a84',
+            accent:  '#c8a96e',
+          },
+          letterSpacing: {
+            widest: '0.25em',
+            ultra:  '0.4em',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #f5f2ec; color: #1a1a18; }
+
+    nav { animation: fadeDown 0.8s ease both; }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #navbar { transition: all 0.3s ease; }
+    #navbar.scrolled {
+      background-color: rgba(245, 242, 236, 0.95);
+      backdrop-filter: blur(8px);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(26,26,24,0.08);
+    }
+    #navbar.scrolled a,
+    #navbar.scrolled .nav-logo { color: #1a1a18 !important; }
+    #navbar.scrolled svg { color: #1a1a18 !important; }
+
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: currentColor;
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+
+    .page-hero { animation: fadeUp 1s ease 0.2s both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .concert-row { transition: background 0.2s ease; cursor: default; }
+    .concert-row:hover { background: rgba(26,26,24,0.04); }
+
+    /* Past — faded */
+    .concert-row.past { opacity: 0.5; }
+    .concert-row.past:hover { opacity: 0.75; background: rgba(26,26,24,0.03); }
+
+    @keyframes shimmer {
+      0%   { opacity: 0.4; }
+      50%  { opacity: 0.8; }
+      100% { opacity: 0.4; }
+    }
+    .skeleton {
+      background: rgba(26,26,24,0.08);
+      border-radius: 3px;
+      animation: shimmer 1.4s ease infinite;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #f5f2ec; }
+    ::-webkit-scrollbar-thumb { background: #c8a96e; }
+
+    /* GOLD TOUCH 1 — upcoming day number */
+    .day-upcoming {
+      color: #c8a96e;
+    }
+
+    /* GOLD TOUCH 2 — divider between upcoming and past */
+    .divider-gold {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #c8a96e40, transparent);
+      margin: 0 2.5rem;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+  <!-- NAV -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-6">
+    <a href="home.html" class="nav-logo font-serif text-sm tracking-widest uppercase text-white">Fulvio Nicolosi</a>
+    <div class="flex items-center gap-10">
+      <a href="home.html#bio"     class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="concerts.html"     class="nav-link text-xs tracking-widest uppercase text-white opacity-100 transition-opacity border-b border-white/40 pb-0.5">Concerti</a>
+      <a href="home.html#gallery" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
+      <a href="home.html#contact" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="#" aria-label="Instagram">
+        <svg class="w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="relative h-[38vh] min-h-[260px] bg-[#151619] flex items-end overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background: radial-gradient(ellipse at 60% 50%, #c8a96e22 0%, transparent 70%);"></div>
+    <div class="page-hero px-10 md:px-20 pb-14 max-w-6xl w-full mx-auto">
+      <h1 class="font-serif text-cream font-light leading-none" style="font-size: clamp(3rem, 8vw, 6rem);">Concerti</h1>
+    </div>
+  </div>
+
+  <!-- UPCOMING -->
+  <section class="reveal pt-24 pb-16 px-10 md:px-20 max-w-6xl mx-auto">
+    <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-12">Upcoming</p>
+    <div id="upcoming-list" class="flex flex-col divide-y divide-charcoal/10">
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-72"></div><div class="skeleton h-3 w-44"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-56"></div><div class="skeleton h-3 w-36"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-64"></div><div class="skeleton h-3 w-40"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+    </div>
+    <div id="upcoming-error" class="hidden py-6">
+      <p class="font-sans text-sm text-muted">Could not load concerts. Please try again later.</p>
+    </div>
+  </section>
+
+  <!-- GOLD DIVIDER -->
+  <div class="divider-gold mx-10 md:mx-20"></div>
+
+  <!-- PAST -->
+  <section class="reveal pt-24 pb-32 px-10 md:px-20 max-w-6xl mx-auto">
+    <div class="flex items-baseline justify-between mb-12">
+      <p class="font-sans text-xs tracking-ultra uppercase text-muted">Concerti Passati</p>
+      <div id="year-filters" class="flex items-center gap-4 flex-wrap justify-end"></div>
+    </div>
+    <div id="past-list" class="flex flex-col divide-y divide-charcoal/10">
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center opacity-50">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-64"></div><div class="skeleton h-3 w-40"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center opacity-50">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-48"></div><div class="skeleton h-3 w-32"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+      <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center opacity-50">
+        <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
+        <div class="col-span-9 flex flex-col gap-2"><div class="skeleton h-4 w-56"></div><div class="skeleton h-3 w-36"></div></div>
+        <div class="col-span-2 flex justify-end"><div class="skeleton h-3 w-14"></div></div>
+      </div>
+    </div>
+    <div id="past-error" class="hidden py-6">
+      <p class="font-sans text-sm text-muted">Could not load past concerts.</p>
+    </div>
+  </section>
+
+  <div class="border-t border-charcoal/10 mx-6 md:mx-20"></div>
+
+  <section class="reveal py-20 md:py-28 px-6 md:px-20">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <div>
+        <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-3">Collaborations & Inquiries</p>
+        <h2 class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">For concerts engagements <br> or other artistic endeavours</h2>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="home.html#contact" class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-charcoal border border-charcoal px-8 py-4 hover:bg-charcoal hover:text-cream transition-colors">
+          Contact me
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-charcoal/10 mx-10 md:mx-20 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="font-sans text-xs text-muted tracking-widest uppercase">© 2026 Fulvio Nicolosi</p>
+    <div class="flex items-center gap-8">
+      <a href="#" class="font-sans text-xs text-muted tracking-widest uppercase hover:text-charcoal transition-colors">Instagram</a>
+    </div>
+  </footer>
+
+  <script>
+    const NOTION_DATABASE = '3389968051328094844cfd5b4e8af7fa';
+    const WORKER_URL      = 'https://shiny-band-f5c9.mark04social.workers.dev';
+    const PROPS = {
+      titolo:   'Titolo',
+      data:     'Date',
+      luogo:    'Luogo',
+      biglietti:'URL',
+      visibile: 'Checkbox',
+    };
+
+    const MESI_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      return { giorno: String(d.getDate()).padStart(2, '0'), mese: MESI_EN[d.getMonth()], anno: d.getFullYear() };
+    }
+
+    function renderConcert(concert, isPast = false) {
+      const props     = concert.properties;
+      const titolo    = props[PROPS.titolo]?.title?.[0]?.plain_text ?? props[PROPS.titolo]?.rich_text?.[0]?.plain_text ?? '';
+      const dataRaw   = props[PROPS.data]?.date?.start ?? null;
+      const luogo     = props[PROPS.luogo]?.rich_text?.[0]?.plain_text ?? '';
+      const biglietti = props[PROPS.biglietti]?.url ?? null;
+      if (!titolo || !dataRaw) return '';
+      const { giorno, mese, anno } = formatDate(dataRaw);
+
+      // GOLD TOUCH 1 — day number gold only for upcoming
+      const dayColor = isPast ? 'text-charcoal' : 'day-upcoming';
+
+      return `
+        <div class="concert-row ${isPast ? 'past' : ''} py-7 grid grid-cols-12 gap-4 items-center">
+          <div class="col-span-2 md:col-span-1">
+            <p class="font-serif text-3xl font-light ${dayColor} leading-none">${giorno}</p>
+            <p class="font-sans text-[10px] text-muted uppercase tracking-widest mt-0.5">${mese} ${anno}</p>
+          </div>
+          <div class="col-span-7 md:col-span-9">
+            <p class="font-serif text-lg font-light text-charcoal">${titolo}</p>
+            ${luogo ? `<p class="font-sans text-xs text-muted tracking-wide mt-1">${luogo}</p>` : ''}
+          </div>
+          <div class="col-span-3 md:col-span-2 text-right">
+            ${!isPast && biglietti
+              ? `<a href="${biglietti}" target="_blank" rel="noopener"
+                    class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">
+                    Biglietti
+                 </a>`
+              : !isPast
+                ? `<span class="font-sans text-xs tracking-widest uppercase text-muted">Soon</span>`
+                : ''
+            }
+          </div>
+        </div>`;
+    }
+
+    let allPastConcerts = [];
+
+    function renderPastList(concerts) {
+      const list = document.getElementById('past-list');
+      list.innerHTML = concerts.length === 0
+        ? '<p class="font-sans text-sm text-muted py-8">No past concerts to show.</p>'
+        : concerts.map(c => renderConcert(c, true)).join('');
+    }
+
+    function buildYearFilters(concerts) {
+      const years = [...new Set(
+        concerts.map(c => c.properties[PROPS.data]?.date?.start).filter(Boolean)
+          .map(d => new Date(d + 'T00:00:00').getFullYear())
+      )].sort((a, b) => b - a);
+
+      if (years.length <= 1) return;
+
+      const container = document.getElementById('year-filters');
+      container.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'All';
+      // GOLD TOUCH 3 — active filter uses gold underline
+      allBtn.className = 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b text-charcoal border-accent';
+      allBtn.onclick = () => { renderPastList(allPastConcerts); updateFilterButtons(null); };
+      container.appendChild(allBtn);
+
+      years.forEach(year => {
+        const btn = document.createElement('button');
+        btn.textContent = year;
+        btn.dataset.year = year;
+        btn.className = 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b border-transparent text-muted hover:text-charcoal';
+        btn.onclick = () => {
+          const filtered = allPastConcerts.filter(c => {
+            const d = c.properties[PROPS.data]?.date?.start;
+            return d && new Date(d + 'T00:00:00').getFullYear() === year;
+          });
+          renderPastList(filtered);
+          updateFilterButtons(year);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function updateFilterButtons(activeYear) {
+      document.querySelectorAll('#year-filters button').forEach(btn => {
+        const isActive = activeYear === null ? btn.textContent === 'All' : btn.dataset.year == activeYear;
+        if (isActive) {
+          btn.classList.remove('text-muted', 'border-transparent');
+          btn.classList.add('text-charcoal', 'border-accent'); // gold underline on active
+        } else {
+          btn.classList.remove('text-charcoal', 'border-accent');
+          btn.classList.add('text-muted', 'border-transparent');
+        }
+      });
+    }
+
+    async function loadUpcoming() {
+      const list  = document.getElementById('upcoming-list');
+      const error = document.getElementById('upcoming-error');
+      const today = new Date().toISOString().split('T')[0];
+      try {
+        const res = await fetch(`${WORKER_URL}/v1/databases/${NOTION_DATABASE}/query`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filter: { and: [
+              { property: PROPS.visibile, checkbox: { equals: true } },
+              { property: PROPS.data,     date:     { on_or_after: today } },
+            ]},
+            sorts: [{ property: PROPS.data, direction: 'ascending' }],
+            page_size: 50,
+          }),
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        list.innerHTML = '';
+        if (data.results.length === 0) {
+          list.innerHTML = '<p class="font-sans text-sm text-muted py-8">No upcoming concerts at the moment.</p>';
+          return;
+        }
+        list.innerHTML = data.results.map(c => renderConcert(c, false)).join('');
+      } catch {
+        list.innerHTML = '';
+        error.classList.remove('hidden');
+      }
+    }
+
+    async function loadPast() {
+      const list  = document.getElementById('past-list');
+      const error = document.getElementById('past-error');
+      const today = new Date().toISOString().split('T')[0];
+      try {
+        const res = await fetch(`${WORKER_URL}/v1/databases/${NOTION_DATABASE}/query`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filter: { and: [
+              { property: PROPS.visibile, checkbox: { equals: true } },
+              { property: PROPS.data,     date:     { before: today } },
+            ]},
+            sorts: [{ property: PROPS.data, direction: 'descending' }],
+            page_size: 100,
+          }),
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        list.innerHTML = '';
+        allPastConcerts = data.results;
+        if (data.results.length === 0) {
+          list.innerHTML = '<p class="font-sans text-sm text-muted py-8">No past concerts yet.</p>';
+          return;
+        }
+        buildYearFilters(data.results);
+        renderPastList(data.results);
+      } catch {
+        list.innerHTML = '';
+        error.classList.remove('hidden');
+      }
+    }
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+
+    document.addEventListener('DOMContentLoaded', () => { loadUpcoming(); loadPast(); });
+  </script>
+</body>
+</html>

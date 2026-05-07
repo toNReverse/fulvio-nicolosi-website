@@ -36,14 +36,12 @@
   <style>
     html { scroll-behavior: smooth; }
     body { background-color: #f5f2ec; color: #1a1a18; }
-    /* Animations */
     nav { animation: fadeDown 0.8s ease both; }
     .hero-title { animation: fadeUp 1s ease 0.3s both; }
     .hero-sub   { animation: fadeUp 1s ease 0.6s both; }
     .hero-quote { animation: fadeUp 1s ease 0.9s both; }
-    
     .hero-img {
-      filter: grayscale(100%) contrast(1.05);
+      /* Rimosso il filtro grayscale e contrast per lasciare i colori originali */
       animation: imgReveal 1.4s ease 0.1s both;
     }
     @keyframes fadeDown {
@@ -58,7 +56,6 @@
       from { opacity: 0; transform: scale(1.03); }
       to   { opacity: 1; transform: scale(1); }
     }
-    /* Scroll Reveal Classes */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -68,7 +65,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-    /* Interactive Elements */
     .concert-row { transition: background 0.2s ease; }
     .concert-row:hover { background: rgba(26,26,24,0.04); }
     .nav-link { position: relative; }
@@ -81,20 +77,40 @@
       transition: width 0.25s ease;
     }
     .nav-link:hover::after { width: 100%; }
+    
     .video-thumb { overflow: hidden; }
     .video-thumb img {
       transition: transform 0.5s ease, filter 0.5s ease;
-      filter: grayscale(100%);
+      filter: none; 
     }
     .video-thumb:hover img {
       transform: scale(1.04);
-      filter: grayscale(40%);
+      filter: none;
     }
-    /* Scrollbar */
+
+    /* Stili per il Modal del Video YouTube */
+    #video-modal {
+      display: none;
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(26,26,24,0.95);
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    #video-modal.open { display: flex; animation: fadeUp 0.3s ease both; }
+    #video-modal iframe {
+      width: 100%; max-width: 1000px; aspect-ratio: 16/9;
+      border: none; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    #close-video {
+      position: absolute; top: 24px; right: 28px;
+      cursor: pointer; opacity: 0.5; color: #f5f2ec;
+      transition: opacity 0.2s;
+    }
+    #close-video:hover { opacity: 1; }
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #f5f2ec; }
     ::-webkit-scrollbar-thumb { background: #c8a96e; }
-    /* Forms Base */
     input, textarea {
       outline: none;
       background: transparent;
@@ -108,8 +124,6 @@
     }
     input::placeholder, textarea::placeholder { color: #8a8a84; }
     input:focus, textarea:focus { border-bottom-color: #c8a96e; }
-    
-    /* Override per i colori degli input su sfondo scuro (Sezione Contatti) */
     #contact-form input, #contact-form textarea {
       color: #f5f2ec;
       border-bottom-color: rgba(245, 242, 236, 0.3);
@@ -120,8 +134,6 @@
     #contact-form input:focus, #contact-form textarea:focus {
       border-bottom-color: #c8a96e;
     }
-
-    /* Skeleton Loading Animation */
     @keyframes shimmer {
       0%   { opacity: 0.4; }
       50%  { opacity: 0.8; }
@@ -132,7 +144,6 @@
       border-radius: 3px;
       animation: shimmer 1.4s ease infinite;
     }
-    /* Navbar Scroll Effect */
     #navbar.scrolled {
       background-color: rgba(245, 242, 236, 0.95);
       backdrop-filter: blur(8px);
@@ -143,8 +154,6 @@
     #navbar.scrolled .text-white {
       color: #1a1a18 !important; 
     }
-    
-    /* Override navbar quando il menu mobile è aperto */
     #navbar.menu-open {
       background-color: transparent !important;
       backdrop-filter: none !important;
@@ -153,19 +162,16 @@
     #navbar.menu-open .text-white {
       color: #f5f2ec !important;
     }
-    /* Navbar Dark Scroll Effect (per l'ultima sezione) */
     #navbar.scrolled-dark {
-      background-color: rgba(21, 22, 25, 0.95); /* Colore #151619 con 95% di opacità */
+      background-color: rgba(21, 22, 25, 0.95);
       backdrop-filter: blur(8px);
       padding-top: 1rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(245, 242, 236, 0.05); /* Bordo chiaro leggerissimo */
+      border-bottom: 1px solid rgba(245, 242, 236, 0.05);
     }
-    /* Mantiene il testo bianco/crema quando la navbar è scura */
     #navbar.scrolled-dark .text-white {
       color: #f5f2ec !important; 
     }
-    /* Adatta il colore della linea di hover dei link */
     #navbar.scrolled-dark .nav-link::after {
       background: #f5f2ec;
     }
@@ -173,57 +179,56 @@
 </head>
 <body class="font-sans antialiased">
   
-  <!-- NAV -->
+  <div id="video-modal" role="dialog" aria-modal="true">
+    <button id="close-video" aria-label="Chiudi">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <iframe id="youtube-iframe" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-6 transition-all duration-300">  
     <a href="#" class="font-serif text-sm tracking-widest uppercase text-white relative z-50">Fulvio Nicolosi</a>
     
-    <!-- Link Desktop (Nascosti su Mobile) -->
     <div class="hidden md:flex items-center gap-10">
-      <a href="#bio"      class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="#calendar" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
-      <a href="#gallery"   class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
-      <a href="#contact"  class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+      <a href="#bio"      data-i18n="navBio" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="#calendar" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
+      <a href="gallery.html" data-i18n="navGallery" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
+      <a href="#contact"  data-i18n="navContatti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
     
-    <!-- Social Desktop (Nascosti su Mobile) -->
     <div class="hidden md:flex items-center gap-4">
-      <a href="#" aria-label="Instagram">
+      <!-- Language Switch -->
+      <button id="lang-switch" onclick="toggleLang()" class="font-sans text-[10px] tracking-widest uppercase text-white opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5" aria-label="Cambia lingua">
+        <span id="lang-label">EN</span>
+      </button>
+      <span class="text-white/20 text-xs">|</span>
+      <a href="https://www.instagram.com/fulvio.nicolosi/" aria-label="Instagram" target="_blank" rel="noopener">
         <svg class="w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      </a>
-      <a href="#" aria-label="YouTube">
-        <svg class="w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
     </div>
 
-    <!-- Pulsante Menu Mobile (Visibile solo su Mobile) -->
     <button id="mobile-menu-btn" class="md:hidden text-white relative z-50 focus:outline-none" aria-label="Menu">
       <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
 
-    <!-- Overlay Menu Mobile -->
     <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
-      <a href="#bio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
-      <a href="#calendar" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Concerti</a>
-      <a href="#gallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Gallery</a>
-      <a href="#contact" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+      <a href="#bio"         data-i18n="mobileBio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
+      <a href="#calendar"    data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Concerti</a>
+      <a href="gallery.html" data-i18n="mobileGallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Gallery</a>
+      <a href="#contact"     data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
       
       <div class="flex items-center gap-6 mt-8">
-        <a href="#" class="text-cream/60 hover:text-cream transition-colors">Instagram</a>
-        <a href="#" class="text-cream/60 hover:text-cream transition-colors">YouTube</a>
+        <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Instagram</a>
       </div>
+      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="relative h-screen overflow-hidden">
-    <!-- Immagine di sfondo -->
-    <img src="./img2.jpg" alt="Fulvio Nicolosi - Italian Pianist" class="absolute inset-0 w-full h-full object-cover object-center z-0">
-    <!-- Overlay scuro -->
+    <img src="./img/img7.jpg" alt="Fulvio Nicolosi - Italian Pianist" class="absolute inset-0 w-full h-full object-cover object-center z-0 hero-img">
     <div class="absolute inset-0 bg-charcoal/40 z-0"></div>
-    
-    <!-- Gradiente in alto per proteggere la Navbar bianca -->
     <div class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-charcoal/70 to-transparent z-10 pointer-events-none"></div>
     
     <div class="absolute bottom-16 left-6 md:left-10 right-6 md:right-10 z-20">
@@ -241,12 +246,11 @@
     </div>
     
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-50 z-20">
-      <span class="font-sans text-cream text-xs tracking-widest uppercase">Scorri</span>
+      <span data-i18n="scrollLabel" class="font-sans text-cream text-xs tracking-widest uppercase">Scorri</span>
       <svg class="w-4 h-4 text-cream animate-bounce" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
     </div>
   </section>
 
-  <!-- PRESS / QUOTES -->
   <section id="press" class="reveal py-20 md:py-28 px-4 md:px-10 max-w-6xl mx-auto relative min-h-[500px] md:min-h-[450px] flex flex-col items-center justify-center">
     
     <button onclick="prevSlide()" class="absolute left-2 md:left-10 top-1/2 -translate-y-1/2 p-2 text-charcoal/30 hover:text-charcoal transition-colors z-20 focus:outline-none" aria-label="Citazione precedente">
@@ -259,27 +263,21 @@
         <p class="font-serif text-2xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Since the very first encounter I have been uplifted by his playing: not only Fulvio is a very good pianist, with a virtuoso ambition and big repertoire, but he is a very refined musician, always at the service of music."
         </p>
-        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">
-          — Beatrice Rana
-        </p>
+        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">— Beatrice Rana</p>
       </div>
 
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-0 z-0 pointer-events-none flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-2xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Fulvio brought his transcendental mastery to full use as he played with a fearless abandon and youthful mastery that was breathtaking."
         </p>
-        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">
-          — Christopher Axworthy
-        </p>
+        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">— Christopher Axworthy</p>
       </div>
 
       <div class="quote-slide absolute transition-all duration-1000 ease-in-out opacity-0 z-0 pointer-events-none flex flex-col items-center text-center gap-6 w-full">
         <p class="font-serif text-2xl md:text-4xl font-light italic text-charcoal leading-relaxed">
           "Nicolosi ha lasciato un segno particolare grazie alla proposta delle rare chansons Trenet/Weissenberg, interpretate dal talento catanese con virtuosismo e affascinante sprezzatura"
         </p>
-        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">
-          — Luca Ciammarughi (Suonare News)
-        </p>
+        <p class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">— Luca Ciammarughi (Suonare News)</p>
       </div>
       
     </div>
@@ -297,25 +295,23 @@
 
   <div class="border-t border-charcoal/10 mx-6 md:mx-20"></div>
 
-  <!-- BIO -->
   <section id="bio" class="reveal py-20 md:py-28 bg-[#151619]">
     <div class="px-6 md:px-20 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-start">
       <div>
-        <p class="font-sans text-xs tracking-ultra uppercase text-cream/50 mb-6">Biografia</p>
-        <h2 class="font-serif text-3xl md:text-4xl font-light leading-snug text-cream mb-8">
+        <p data-i18n="biographyLabel" class="font-sans text-xs tracking-ultra uppercase text-cream/50 mb-6">Biografia</p>
+        <h2 data-i18n="bioTitle" class="font-serif text-3xl md:text-4xl font-light leading-snug text-cream mb-8">
           Pianista italiano.<br>Premiato a livello internazionale.
         </h2>
       </div>
       <div class="flex flex-col items-start">
-        <p class="font-sans text-sm leading-loose text-cream/80 mb-6">
+        <p data-i18n="bioText1" class="font-sans text-sm leading-loose text-cream/80 mb-6">
           Riconosciuto per la sua voce speciale e la profondità interpretativa, Fulvio Nicolosi si è esibito alla Scala di Milano, al Konzerthaus di Vienna, alla Salle Gaveau di Parigi e al Palau de la Música di Barcellona. Vincitore del Concorso Internazionale di Ginevra e del Premio Abbiati, è artista esclusiva di Decca Classics.
         </p>
-        <p class="font-sans text-sm leading-loose text-cream/80 mb-10">
+        <p data-i18n="bioText2" class="font-sans text-sm leading-loose text-cream/80 mb-10">
           Nato a Catania nel 1990, ha studiato al Conservatorio di Santa Cecilia sotto la guida di Benedetto Lupo, per poi perfezionarsi con Radu Lupu all'Accademia di Zurigo. Il suo primo album <em class="font-serif italic">Radici</em>, dedicato alla musica italiana del Novecento, è previsto per marzo 2027.
         </p>
-        
         <a href="bio.html" class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-cream border-b border-cream/30 hover:border-cream pb-0.5 transition-colors">
-          Altro
+          <span data-i18n="bioLink">Altro</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
@@ -324,9 +320,8 @@
   
   <div class="border-t border-charcoal/10 mx-6 md:mx-20"></div>
 
-  <!-- CALENDAR -->
   <section id="calendar" class="reveal py-20 md:py-28 px-6 md:px-20 max-w-6xl mx-auto">
-    <p class="font-sans text-sm tracking-ultra uppercase text-muted mb-12">Prossimi concerti</p>
+    <p data-i18n="concertsLabel" class="font-sans text-sm tracking-ultra uppercase text-muted mb-12">Prossimi concerti</p>
     <div id="concerts-list" class="flex flex-col divide-y divide-charcoal/10">
       <div class="concert-skeleton py-7 grid grid-cols-12 gap-4 items-center">
         <div class="col-span-3 md:col-span-1"><div class="skeleton h-8 w-10"></div></div>
@@ -343,24 +338,74 @@
       <p class="font-sans text-sm text-muted">Non è stato possibile caricare i concerti. Riprova più tardi.</p>
     </div>
     <div class="mt-12">
-      <a href="#" class="font-sans text-sm tracking-ultra uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">Vedi di più →</a>
+      <a href="concerts.html" data-i18n="concertsMore" class="font-sans text-sm tracking-ultra uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">Vedi di più →</a>
     </div>
   </section>
 
   <div class="border-t border-charcoal/10 mx-6 md:mx-20"></div>
 
-  <!-- CONTATTI E FOOTER -->
+  <section id="video" class="reveal py-20 md:py-28 px-6 md:px-20 max-w-6xl mx-auto">
+    <p data-i18n="videoLabel" class="font-sans text-sm tracking-ultra uppercase text-muted mb-12">Performance Video</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div class="video-thumb relative h-64 group cursor-pointer" onclick="openVideo('N-f8uIre65E')">
+        <img src="./img/img4.jpg" alt="Video — Chopin" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <div class="w-14 h-14 bg-charcoal/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-charcoal/50 transition-colors">
+            <svg class="text-cream w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-charcoal/90 to-transparent z-10">
+          <p class="font-serif text-lg text-cream leading-tight">R . Schumann- Piano Quintet Op. 44 IV mov</p>
+          <p class="font-sans text-[10px] text-cream/60 mt-2 tracking-widest uppercase">Salina · "Palazzo Marchetti"</p>
+        </div>
+      </div>
+
+      <div class="video-thumb relative h-64 group cursor-pointer" onclick="openVideo('Op8FFM29E5c')">
+        <img src="./img/img5.jpg" alt="Video — Prokofiev" class="absolute inset-0 w-full h-full object-cover">
+        
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <div class="w-14 h-14 bg-charcoal/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-charcoal/50 transition-colors">
+            <svg class="text-cream w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-charcoal/90 to-transparent z-10">
+          <p class="font-serif text-lg text-cream leading-tight">Prokofiev - Piano Sonata No. 7, op. 83</p>
+          <p class="font-sans text-[10px] text-cream/60 mt-2 tracking-widest uppercase">Perugia · "Sala dei Notari"</p>
+        </div>
+      </div>
+
+      <div class="video-thumb relative h-64 group cursor-pointer" onclick="openVideo('2fTNXd1eUQc')">
+        <img src="./img/img6.jpg" alt="Video Short" class="absolute inset-0 w-full h-full object-cover">
+        
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <div class="w-14 h-14 bg-charcoal/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-charcoal/50 transition-colors">
+            <svg class="text-cream w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-charcoal/90 to-transparent z-10">
+          <p class="font-serif text-lg text-cream leading-tight">Titolo del tuo video Short</p>
+          <p class="font-sans text-[10px] text-cream/60 mt-2 tracking-widest uppercase">Live · 2026</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <div class="relative overflow-hidden">
-    <img src="./img4.jpg" alt="..." class="absolute inset-0 w-full h-full object-cover z-0">
+    <img src="./img/img1.jpg" alt="..." class="absolute inset-0 w-full h-full object-cover z-0">
     <div class="absolute inset-0 bg-[#151619]/90 z-0"></div>
 
     <section id="contact" class="reveal relative z-10 py-20 md:py-32 px-6 md:px-20">
       <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-start">
         
         <div class="flex flex-col">
-          <p class="font-sans text-xs tracking-ultra uppercase text-cream/60 mb-6">Contatti</p>
-          <h2 class="font-serif text-4xl md:text-5xl font-light text-cream leading-snug mb-6">Scrivimi</h2>
-          <p class="font-sans text-sm text-cream/80 leading-loose mb-4 max-w-md">
+          <p data-i18n="contactsLabel" class="font-sans text-xs tracking-ultra uppercase text-cream/60 mb-6">Contatti</p>
+          <h2 data-i18n="contactTitle" class="font-serif text-4xl md:text-5xl font-light text-cream leading-snug mb-6">Scrivimi</h2>
+          <p data-i18n="contactText" class="font-sans text-sm text-cream/80 leading-loose mb-4 max-w-md">
             Per richieste di concerti, collaborazioni artistiche o ufficio stampa, compila il modulo o scrivi direttamente a:
           </p>
           <a href="mailto:fulvionicolosi@gmail.com" class="font-sans text-xs tracking-widest uppercase text-cream border-b border-cream/30 hover:border-cream pb-0.5 transition-colors w-max">fulvionicolosi@gmail.com</a>
@@ -372,25 +417,25 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Nome</label>
-              <input type="text" name="Nome" placeholder="Il tuo nome" required />
+              <label data-i18n="formName" class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Nome</label>
+              <input data-i18n="formNamePh" type="text" name="Nome" placeholder="Il tuo nome" required />
             </div>
             <div>
-              <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Cognome</label>
-              <input type="text" name="Cognome" placeholder="Il tuo cognome" required />
+              <label data-i18n="formSurname" class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Cognome</label>
+              <input data-i18n="formSurnamePh" type="text" name="Cognome" placeholder="Il tuo cognome" required />
             </div>
           </div>
           <div>
-            <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Email</label>
+            <label data-i18n="formEmail" class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Email</label>
             <input type="email" name="Email" placeholder="email@esempio.com" required />
           </div>
           <div>
-            <label class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Messaggio</label>
-            <textarea name="Messaggio" rows="3" placeholder="Scrivi qui..." required></textarea>
+            <label data-i18n="formMessage" class="font-sans text-[10px] tracking-widest uppercase text-cream/60 block mb-1">Messaggio</label>
+            <textarea data-i18n="formMessagePh" name="Messaggio" rows="3" placeholder="Scrivi qui..." required></textarea>
           </div>
           
           <div class="mt-4">
-            <button type="submit" id="submit-button" class="font-sans text-xs tracking-ultra uppercase text-charcoal bg-cream px-8 py-3 hover:bg-cream/90 transition-colors w-full">
+            <button type="submit" id="submit-button" data-i18n="formSubmit" class="font-sans text-xs tracking-ultra uppercase text-charcoal bg-cream px-8 py-3 hover:bg-cream/90 transition-colors w-full">
               Invia
             </button>
           </div>
@@ -398,20 +443,41 @@
         </form>
         
       </div>
-    </section>  
+    </section>
 
     <footer class="relative z-10 border-t border-cream/20 mx-6 md:mx-20 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="font-sans text-xs text-cream/60 tracking-widest uppercase text-center md:text-left">© 2026 Fulvio Nicolosi</p>
       <div class="flex items-center gap-8">
-        <a href="#" class="font-sans text-xs text-cream/60 tracking-widest uppercase hover:text-cream transition-colors">Instagram</a>
-        <a href="#" class="font-sans text-xs text-cream/60 tracking-widest uppercase hover:text-cream transition-colors">YouTube</a>
+        <a href="https://www.instagram.com/fulvio.nicolosi/" class="font-sans text-xs text-cream/60 tracking-widest uppercase hover:text-cream transition-colors" target="_blank" rel="noopener">Instagram</a>
       </div>
     </footer>
     
   </div>
 
   <script>
-    // --- MENU MOBILE JS ---
+    // ── Logica Video Lightbox ──
+    const videoModal = document.getElementById('video-modal');
+    const ytIframe = document.getElementById('youtube-iframe');
+
+    function openVideo(videoId) {
+      ytIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      videoModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideo() {
+      ytIframe.src = '';
+      videoModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('close-video').addEventListener('click', closeVideo);
+    
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeVideo();
+    });
+
+    // MENU MOBILE
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const navbar = document.getElementById('navbar');
@@ -420,21 +486,16 @@
 
     mobileMenuBtn.addEventListener('click', () => {
       const isClosed = mobileMenu.classList.contains('opacity-0');
-      
       if (isClosed) {
-        // Apri il menu
         mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
         navbar.classList.add('menu-open');
-        menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // Icona "X"
+        menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
       } else {
-        // Chiudi il menu
         mobileMenu.classList.add('opacity-0', 'pointer-events-none');
         navbar.classList.remove('menu-open');
-        menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Icona "Hamburger"
+        menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
       }
     });
-
-    // Chiudi il menu quando si clicca un link
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('opacity-0', 'pointer-events-none');
@@ -443,35 +504,24 @@
       });
     });
 
-    // --- NAV SCROLL EFFECT ---
-// --- NAV SCROLL EFFECT ---
-const contactSection = document.getElementById('contact');
-    // Selezioniamo il contenitore padre che ha effettivamente lo sfondo scuro
+    // NAV SCROLL EFFECT
+    const contactSection = document.getElementById('contact');
     const darkSectionWrapper = contactSection.parentElement;
-
     window.addEventListener('scroll', () => {
-      // Calcola l'altezza dinamica della navbar
       const navHeight = navbar.offsetHeight;
-      // Misura la distanza della sezione scura dal bordo superiore dello schermo
       const darkSectionTop = darkSectionWrapper.getBoundingClientRect().top;
-
-      // Se il bordo superiore della sezione scura tocca o supera la navbar
       if (darkSectionTop <= navHeight) {
         navbar.classList.add('scrolled-dark');
         navbar.classList.remove('scrolled');
-      } 
-      // Altrimenti, se stiamo semplicemente scrollando la pagina
-      else if (window.scrollY > 50) {
+      } else if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
         navbar.classList.remove('scrolled-dark');
-      } 
-      // Se siamo in cima alla pagina
-      else {
+      } else {
         navbar.classList.remove('scrolled', 'scrolled-dark');
       }
     });
 
-    // --- NOTION CONCERTS ---
+    // NOTION CONCERTS
     const NOTION_DATABASE = '3389968051328094844cfd5b4e8af7fa';
     const WORKER_URL      = 'https://shiny-band-f5c9.mark04social.workers.dev';
     const PROPS = {
@@ -482,14 +532,19 @@ const contactSection = document.getElementById('contact');
       visibile: 'Checkbox',
     };
     const MESI_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+    const MESI_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     function formatDate(dateStr) {
       const d = new Date(dateStr + 'T00:00:00');
+      const mesi = currentLang === 'en' ? MESI_EN : MESI_IT;
       return {
         giorno: String(d.getDate()).padStart(2, '0'),
-        mese:   MESI_IT[d.getMonth()],
+        mese:   mesi[d.getMonth()],
+        anno:   d.getFullYear(),
       };
     }
+
+    let cachedHomeConcerts = [];
 
     function renderConcert(concert) {
       const props = concert.properties;
@@ -497,16 +552,13 @@ const contactSection = document.getElementById('contact');
       const dataRaw   = props[PROPS.data]?.date?.start ?? null;
       const luogo     = props[PROPS.luogo]?.rich_text?.[0]?.plain_text ?? '';
       const biglietti = props[PROPS.biglietti]?.url ?? null;
-      
       if (!titolo || !dataRaw) return '';
-      
-      const { giorno, mese } = formatDate(dataRaw);
-      
+      const { giorno, mese, anno } = formatDate(dataRaw);
       return `
         <div class="concert-row py-7 grid grid-cols-12 gap-4 items-center cursor-default">
           <div class="col-span-3 md:col-span-1">
-            <p class="font-serif text-3xl font-light text-charcoal leading-none">${giorno}</p>
-            <p class="font-sans text-xs text-muted uppercase tracking-widest mt-0.5">${mese}</p>
+            <p class="font-serif text-3xl font-light leading-none" style="color:#c8a96e">${giorno}</p>
+            <p class="font-sans text-[10px] text-muted uppercase tracking-widest mt-0.5">${mese} ${anno}</p>
           </div>
           <div class="col-span-6 md:col-span-9">
             <p class="font-serif text-lg font-light text-charcoal">${titolo}</p>
@@ -516,9 +568,9 @@ const contactSection = document.getElementById('contact');
             ${biglietti
               ? `<a href="${biglietti}" target="_blank" rel="noopener"
                     class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">
-                    Biglietti
+                    ${translations[currentLang].concertTickets}
                  </a>`
-              : `<span class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">Presto</span>`
+              : `<span class="font-sans text-[10px] md:text-xs tracking-widest uppercase text-muted">${translations[currentLang].concertSoon}</span>`
             }
           </div>
         </div>
@@ -528,84 +580,71 @@ const contactSection = document.getElementById('contact');
     async function loadConcerts() {
       const list  = document.getElementById('concerts-list');
       const error = document.getElementById('concerts-error');
-      
+      const today = new Date().toISOString().split('T')[0];
       try {
         const res = await fetch(`${WORKER_URL}/v1/databases/${NOTION_DATABASE}/query`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            filter: {
-              and: [
-                { property: PROPS.visibile, checkbox: { equals: true } },
-              ]
-            },
+            filter: { and: [
+              { property: PROPS.visibile, checkbox: { equals: true } },
+              { property: PROPS.data,     date:     { on_or_after: today } },
+            ]},
             sorts: [ { property: PROPS.data, direction: 'ascending' } ],
             page_size: 10,
           }),
         });
-        
         if (!res.ok) throw new Error(`Notion API error: ${res.status}`);
-        
         const data = await res.json();
+        cachedHomeConcerts = data.results;
         list.innerHTML = '';
-        
         if (data.results.length === 0) {
-          list.innerHTML = '<p class="font-sans text-sm text-muted py-8">Nessun concerto in programma al momento.</p>';
+          list.innerHTML = `<p class="font-sans text-sm text-muted py-8">${translations[currentLang].concertsEmpty}</p>`;
           return;
         }
-        
         list.innerHTML = data.results.map(renderConcert).join('');
       } catch (err) {
         console.error('Errore caricamento concerti:', err);
         list.innerHTML = '';
+        error.innerHTML = `<p class="font-sans text-sm text-muted">${translations[currentLang].concertsError}</p>`;
         error.classList.remove('hidden');
       }
     }
 
-    // Scroll Reveal Interaction
+    // Scroll Reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible'); 
-          observer.unobserve(e.target); 
-        }
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
       });
     }, { threshold: 0.1 });
     reveals.forEach(section => observer.observe(section));
 
     document.addEventListener('DOMContentLoaded', loadConcerts);
 
-    // --- WEB3FORMS ---
+    // WEB3FORMS
     const form = document.getElementById('contact-form');
     const result = document.getElementById('form-result');
     const submitButton = document.getElementById('submit-button');
-    
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      submitButton.innerText = 'Invio in corso...';
+      submitButton.innerText = translations[currentLang].formSending;
       submitButton.classList.add('opacity-50', 'cursor-not-allowed');
       submitButton.disabled = true;
-      
       const formData = new FormData(form);
       const object = Object.fromEntries(formData);
       const json = JSON.stringify(object);
-      
       result.classList.remove('hidden');
-      result.innerText = "Attendi un istante...";
-      
+      result.innerText = translations[currentLang].formWait;
       fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: json
       })
       .then(async (response) => {
         let json = await response.json();
         if (response.status == 200) {
-          result.innerHTML = "Grazie! Il tuo messaggio è stato inviato con successo.";
+          result.innerHTML = translations[currentLang].formSuccess;
           result.classList.add('text-green-600');
           form.reset();
         } else {
@@ -614,11 +653,11 @@ const contactSection = document.getElementById('contact');
         }
       })
       .catch(error => {
-        result.innerHTML = "Qualcosa è andato storto. Riprova più tardi.";
+        result.innerHTML = translations[currentLang].formError;
         result.classList.add('text-red-500');
       })
       .finally(() => {
-        submitButton.innerText = 'Invia';
+        submitButton.innerText = translations[currentLang].formSubmit;
         submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
         submitButton.disabled = false;
         setTimeout(() => {
@@ -628,7 +667,131 @@ const contactSection = document.getElementById('contact');
       });
     });
 
-    // --- SCRIPT PER LO SLIDER CITAZIONI ---
+    // ── LANGUAGE SWITCH ──
+    const translations = {
+      it: {
+        navBio: 'Bio',
+        navConcerti: 'Concerti',
+        navGallery: 'Gallery',
+        navContatti: 'Contatti',
+        mobileBio: 'Bio',
+        mobileConcerti: 'Concerti',
+        mobileGallery: 'Gallery',
+        mobileContatti: 'Contatti',
+        heroSub: 'Italian pianist',
+        scrollLabel: 'Scorri',
+        biographyLabel: 'Biografia',
+        bioTitle: 'Pianista italiano.<br>Premiato a livello internazionale.',
+        bioText1: 'Riconosciuto per la sua voce speciale e la profondità interpretativa, Fulvio Nicolosi si è esibito alla Scala di Milano, al Konzerthaus di Vienna, alla Salle Gaveau di Parigi e al Palau de la Música di Barcellona. Vincitore del Concorso Internazionale di Ginevra e del Premio Abbiati, è artista esclusiva di Decca Classics.',
+        bioText2: 'Nato a Catania nel 1990, ha studiato al Conservatorio di Santa Cecilia sotto la guida di Benedetto Lupo, per poi perfezionarsi con Radu Lupu all\'Accademia di Zurigo. Il suo primo album <em class="font-serif italic">Radici</em>, dedicato alla musica italiana del Novecento, è previsto per marzo 2027.',
+        bioLink: 'Altro',
+        concertsLabel: 'Prossimi concerti',
+        concertsMore: 'Vedi di più →',
+        concertsEmpty: 'Nessun concerto in programma al momento.',
+        concertsError: 'Non è stato possibile caricare i concerti. Riprova più tardi.',
+        concertTickets: 'Biglietti',
+        concertSoon: 'Presto',
+        videoLabel: 'Performance Video',
+        contactsLabel: 'Contatti',
+        contactTitle: 'Scrivimi',
+        contactText: 'Per richieste di concerti, collaborazioni artistiche o ufficio stampa, compila il modulo o scrivi direttamente a:',
+        formName: 'Nome',
+        formNamePh: 'Il tuo nome',
+        formSurname: 'Cognome',
+        formSurnamePh: 'Il tuo cognome',
+        formEmail: 'Email',
+        formMessage: 'Messaggio',
+        formMessagePh: 'Scrivi qui...',
+        formSubmit: 'Invia',
+        formSending: 'Invio in corso...',
+        formWait: 'Attendi un istante...',
+        formSuccess: 'Grazie! Il tuo messaggio è stato inviato con successo.',
+        formError: 'Qualcosa è andato storto. Riprova più tardi.',
+        closeVideo: 'Chiudi',
+      },
+      en: {
+        navBio: 'Bio',
+        navConcerti: 'Concerts',
+        navGallery: 'Gallery',
+        navContatti: 'Contact',
+        mobileBio: 'Bio',
+        mobileConcerti: 'Concerts',
+        mobileGallery: 'Gallery',
+        mobileContatti: 'Contact',
+        heroSub: 'Italian pianist',
+        scrollLabel: 'Scroll',
+        biographyLabel: 'Biography',
+        bioTitle: 'Italian pianist.<br>Internationally acclaimed.',
+        bioText1: 'Celebrated for his distinctive voice and interpretive depth, Fulvio Nicolosi has performed at La Scala in Milan, the Konzerthaus in Vienna, the Salle Gaveau in Paris, and the Palau de la Música in Barcelona. Winner of the Geneva International Competition and the Premio Abbiati, he is an exclusive artist of Decca Classics.',
+        bioText2: 'Born in Catania in 1990, he studied at the Conservatorio di Santa Cecilia under Benedetto Lupo, then furthered his training with Radu Lupu at the Zurich Academy. His debut album <em class="font-serif italic">Radici</em>, dedicated to Italian twentieth-century music, is due in March 2027.',
+        bioLink: 'More',
+        concertsLabel: 'Upcoming concerts',
+        concertsMore: 'See more →',
+        concertsEmpty: 'No concerts scheduled at the moment.',
+        concertsError: 'Could not load concerts. Please try again later.',
+        concertTickets: 'Tickets',
+        concertSoon: 'Soon',
+        videoLabel: 'Performance Video',
+        contactsLabel: 'Contact',
+        contactTitle: 'Get in touch',
+        contactText: 'For concert bookings, artistic collaborations or press inquiries, fill in the form or write directly to:',
+        formName: 'First name',
+        formNamePh: 'Your first name',
+        formSurname: 'Last name',
+        formSurnamePh: 'Your last name',
+        formEmail: 'Email',
+        formMessage: 'Message',
+        formMessagePh: 'Write here...',
+        formSubmit: 'Send',
+        formSending: 'Sending...',
+        formWait: 'Please wait...',
+        formSuccess: 'Thank you! Your message has been sent successfully.',
+        formError: 'Something went wrong. Please try again later.',
+        closeVideo: 'Close',
+      }
+    };
+
+    let currentLang = 'it';
+
+    function applyLang(lang) {
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+
+      // Nav links desktop
+      const navLinks = document.querySelectorAll('[data-i18n]');
+      navLinks.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = t[key];
+          } else if (key === 'bioTitle' || key === 'bioText1' || key === 'bioText2') {
+            el.innerHTML = t[key];
+          } else {
+            el.textContent = t[key];
+          }
+        }
+      });
+
+      // Lang switch labels
+      const label = document.getElementById('lang-label');
+      const labelMobile = document.getElementById('lang-switch-mobile');
+      const opposite = lang === 'it' ? 'EN' : 'IT';
+      if (label) label.textContent = opposite;
+      if (labelMobile) labelMobile.textContent = opposite;
+
+      // Re-render concerts with new language months (from cache, no re-fetch)
+      if (cachedHomeConcerts && cachedHomeConcerts.length > 0) {
+        const list = document.getElementById('concerts-list');
+        if (list) list.innerHTML = cachedHomeConcerts.map(renderConcert).join('');
+      }
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'it' ? 'en' : 'it';
+      applyLang(currentLang);
+    }
+
+    // QUOTE SLIDER
     let currentSlide = 0;
     const slides = document.querySelectorAll('.quote-slide');
     const dots = document.querySelectorAll('.quote-dot');
@@ -639,32 +802,19 @@ const contactSection = document.getElementById('contact');
       slides[currentSlide].classList.add('opacity-0', 'z-0', 'pointer-events-none');
       dots[currentSlide].classList.remove('bg-charcoal');
       dots[currentSlide].classList.add('bg-charcoal/20');
-
       currentSlide = index;
-
       slides[currentSlide].classList.remove('opacity-0', 'z-0', 'pointer-events-none');
       slides[currentSlide].classList.add('opacity-100', 'z-10');
       dots[currentSlide].classList.remove('bg-charcoal/20');
       dots[currentSlide].classList.add('bg-charcoal');
-      
       resetInterval();
     }
-
-    function nextSlide() {
-      let nextIndex = (currentSlide + 1) % slides.length;
-      goToSlide(nextIndex);
-    }
-
-    function prevSlide() {
-      let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-      goToSlide(prevIndex);
-    }
-
+    function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+    function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
     function resetInterval() {
       clearInterval(slideInterval);
       slideInterval = setInterval(nextSlide, 6000);
     }
-
     resetInterval();
   </script>
 </body>
