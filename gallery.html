@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fulvio Nicolosi — Gallery</title>
+  <title>Galleria — Fulvio Nicolosi</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -133,6 +133,15 @@
       filter: none;
       border: none;
       box-shadow: 0 10px 40px rgba(26,26,24,0.1);
+      display: block;
+    }
+    /* Wrapper attorno all'immagine: serve per ancorare il bottone download
+       all'angolo basso-destra DELLA FOTO (non del lightbox), così resta
+       elegantemente vicino al contenuto qualunque sia la dimensione. */
+    #lightbox-img-wrap {
+      position: relative;
+      display: inline-block;
+      line-height: 0; /* evita gap fantasma sotto img */
     }
     #lightbox-caption { margin-top: 24px; text-align: center; z-index: 10; }
     #lightbox-close {
@@ -140,6 +149,36 @@
       cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
     }
     #lightbox-close:hover { opacity: 1; }
+    /* Pulsante download: in basso a destra dell'immagine. Sfondo cream
+       traslucido per essere leggibile su foto sia chiare sia scure. Su
+       desktop appare in hover sull'immagine; su mobile/touch è sempre
+       visibile (vedi media query sotto). */
+    #lightbox-download {
+      position: absolute; right: 12px; bottom: 12px;
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(245, 242, 236, 0.85);
+      backdrop-filter: blur(6px);
+      color: #1a1a18;
+      border-radius: 50%;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s, color 0.3s;
+      box-shadow: 0 2px 12px rgba(26,26,24,0.15);
+    }
+    #lightbox-img-wrap:hover #lightbox-download,
+    #lightbox-download:focus-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #lightbox-download:hover { background: #f5f2ec; }
+    #lightbox-download:active { transform: translateY(1px); }
+    #lightbox-download.flash { color: #c8a96e; opacity: 1; transform: translateY(0); }
+    /* Su touch device il pulsante resta sempre visibile (no hover affidabile) */
+    @media (hover: none) {
+      #lightbox-download { opacity: 1; transform: translateY(0); }
+    }
     #lightbox-prev, #lightbox-next {
       position: absolute; top: 50%; transform: translateY(-50%);
       cursor: pointer; opacity: 0.4; transition: opacity 0.2s;
@@ -165,6 +204,13 @@
     ::-webkit-scrollbar-thumb { background:#c8a96e; }
 
     #navbar.menu-open { background-color:transparent!important; backdrop-filter:none!important; border-bottom:none!important; }
+
+    /* ── Bump leggero (+10%) per label piccole su desktop (>=1024px) ── */
+    @media (min-width: 1024px) {
+      .text-xs       { font-size: 0.825rem; }   /* 12px → ~13.2px */
+      .text-\[10px\] { font-size: 11px; }
+      .text-\[9px\]  { font-size: 10px; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -176,7 +222,12 @@
     <button id="lightbox-prev" aria-label="Precedente">
       <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
     </button>
-    <img id="lightbox-img" src="" alt="" />
+    <div id="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="" />
+      <button id="lightbox-download" aria-label="Scarica">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M5 20h14"/></svg>
+      </button>
+    </div>
     <div id="lightbox-caption">
       <p id="lb-caption-text" class="font-sans text-xs tracking-widest uppercase text-charcoal/80"></p>
       <p id="lb-counter" class="font-sans text-[10px] text-charcoal/50 mt-2"></p>
@@ -191,8 +242,8 @@
 
     <div class="hidden md:flex items-center gap-10">
       <a href="bio.html"           data-i18n="navBio"      class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="home.html#calendar" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
-      <a href="gallery.html"       data-i18n="navGallery"  class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-100">Gallery</a>
+      <a href="calendar.html" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Calendario</a>
+      <a href="gallery.html"       data-i18n="navGallery"  class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-100">Galleria</a>
       <a href="home.html#contact"  data-i18n="navContatti" class="nav-link text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
 
@@ -215,8 +266,8 @@
 
     <div id="mobile-menu" class="fixed inset-0 bg-cream flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
       <a href="bio.html"           data-i18n="navBio"      class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Bio</a>
-      <a href="home.html#calendar" data-i18n="navConcerti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Concerti</a>
-      <a href="gallery.html"       data-i18n="navGallery"  class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Gallery</a>
+      <a href="calendar.html" data-i18n="navConcerti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Calendario</a>
+      <a href="gallery.html"       data-i18n="navGallery"  class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Galleria</a>
       <a href="home.html#contact"  data-i18n="navContatti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Contatti</a>
       <div class="flex items-center gap-6 mt-8">
         <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-charcoal/60 hover:text-charcoal transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Instagram</a>
@@ -304,31 +355,40 @@
     const translations = {
       it: {
         navBio:        'Bio',
-        navConcerti:   'Concerti',
-        navGallery:    'Gallery',
+        navConcerti:   'Calendario',
+        navGallery:    'Galleria',
         navContatti:   'Contatti',
+        pageTitle:     'Galleria',
         filterAll:     'Tutto',
         filterPortrait:'Ritratti',
         filterConcert: 'Concerti',
         lbClose:       'Chiudi',
         lbPrev:        'Precedente',
         lbNext:        'Successiva',
+        lbDownload:    'Scarica',
       },
       en: {
         navBio:        'Bio',
-        navConcerti:   'Concerts',
+        navConcerti:   'Calendar',
         navGallery:    'Gallery',
         navContatti:   'Contact',
+        pageTitle:     'Gallery',
         filterAll:     'All',
         filterPortrait:'Portraits',
         filterConcert: 'Concerts',
         lbClose:       'Close',
         lbPrev:        'Previous',
         lbNext:        'Next',
+        lbDownload:    'Download',
       }
     };
 
+    // ── Lingua persistente tra le pagine ──
     let currentLang = 'it';
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved === 'it' || saved === 'en') currentLang = saved;
+    } catch (e) { /* localStorage non disponibile */ }
 
     function applyLang(lang) {
       document.documentElement.lang = lang;
@@ -339,10 +399,14 @@
         if (t[key] !== undefined) el.textContent = t[key];
       });
 
+      // Page title
+      document.title = t.pageTitle + ' — Fulvio Nicolosi';
+
       // Lightbox aria-labels
       document.getElementById('lightbox-close').setAttribute('aria-label', t.lbClose);
       document.getElementById('lightbox-prev').setAttribute('aria-label', t.lbPrev);
       document.getElementById('lightbox-next').setAttribute('aria-label', t.lbNext);
+      document.getElementById('lightbox-download').setAttribute('aria-label', t.lbDownload);
 
       // Lang button labels (show opposite)
       const opposite = lang === 'it' ? 'EN' : 'IT';
@@ -361,8 +425,20 @@
 
     function toggleLang() {
       currentLang = currentLang === 'it' ? 'en' : 'it';
+      try { localStorage.setItem('siteLang', currentLang); } catch (e) {}
       applyLang(currentLang);
     }
+
+    // Sync tra schede aperte
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siteLang' && (e.newValue === 'it' || e.newValue === 'en') && e.newValue !== currentLang) {
+        currentLang = e.newValue;
+        applyLang(currentLang);
+      }
+    });
+
+    // Applica subito la lingua corrente all'avvio della pagina
+    applyLang(currentLang);
 
     // ── Navbar scroll ──
     const navbar = document.getElementById('navbar');
@@ -468,12 +544,82 @@
       e.stopPropagation();
       openLightbox((currentLbIndex + 1) % photoCells.length);
     });
+
+    // ── Download immagine corrente ──
+    // Trasforma una caption tipo "Scala di Milano, 2023" in "Scala_di_Milano_2023".
+    // Mantiene lettere/numeri, sostituisce tutto il resto con "_".
+    function slugify(s) {
+      return (s || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // rimuove accenti (è -> e)
+        .replace(/[^a-zA-Z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '') || 'photo';
+    }
+
+    // Effettua il "click" su un link nascosto. Tecnica usata sia col blob URL
+    // (metodo principale) sia con l'URL diretto (fallback).
+    function triggerDownload(url, filename, isBlob) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Libera la memoria del blob una volta partito il download.
+      if (isBlob) setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function flashDownloadButton() {
+      const btn = document.getElementById('lightbox-download');
+      btn.classList.add('flash');
+      setTimeout(() => btn.classList.remove('flash'), 400);
+    }
+
+    async function downloadCurrentImage(e) {
+      if (e) e.stopPropagation();
+      const cell    = photoCells[currentLbIndex];
+      if (!cell) return;
+      const src     = cell.dataset.src || cell.querySelector('img').src;
+      const caption = cell.dataset.caption || '';
+      const m = src.match(/\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i);
+      const ext = m ? m[1].toLowerCase() : 'jpg';
+      const filename = `Fulvio_Nicolosi_${slugify(caption)}.${ext}`;
+
+      // METODO PRINCIPALE: scarica l'immagine come Blob in memoria, poi
+      // crea un blob URL e lo passa a un link <a download>. Così forziamo
+      // davvero il download, anche su file:// e in browser che ignorano
+      // l'attributo "download" su URL diretti.
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error('fetch ' + res.status);
+        const blob    = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        triggerDownload(blobUrl, filename, true);
+        flashDownloadButton();
+        return;
+      } catch (err) {
+        // FALLBACK: se fetch fallisce (es. CORS su CDN esterno) ripiego
+        // sul metodo classico <a href download>. In alcuni casi il browser
+        // aprirà comunque l'immagine in una nuova scheda — è il limite
+        // imposto dalle policy del browser e non è aggirabile lato client.
+        console.warn('Blob download failed, falling back to direct link:', err);
+        try {
+          triggerDownload(src, filename, false);
+          flashDownloadButton();
+        } catch (err2) {
+          console.error('Download failed entirely:', err2);
+        }
+      }
+    }
+    document.getElementById('lightbox-download').addEventListener('click', downloadCurrentImage);
+
     lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', e => {
       if (!lightbox.classList.contains('open')) return;
       if (e.key === 'Escape')     closeLightbox();
       if (e.key === 'ArrowLeft')  document.getElementById('lightbox-prev').click();
       if (e.key === 'ArrowRight') document.getElementById('lightbox-next').click();
+      if (e.key === 'd' || e.key === 'D') downloadCurrentImage();
     });
   </script>
 </body>

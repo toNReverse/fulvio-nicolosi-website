@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Concerts — Fulvio Nicolosi</title>
+  <title>Calendario — Fulvio Nicolosi</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -52,8 +52,18 @@
       border-bottom: 1px solid rgba(26,26,24,0.08);
     }
     #navbar.scrolled a,
-    #navbar.scrolled .nav-logo { color: #1a1a18 !important; }
+    #navbar.scrolled .nav-logo,
+    #navbar.scrolled .text-white { color: #1a1a18 !important; }
     #navbar.scrolled svg { color: #1a1a18 !important; }
+    #navbar.menu-open {
+      background-color: transparent !important;
+      backdrop-filter: none !important;
+      border-bottom: none !important;
+    }
+    #navbar.menu-open a,
+    #navbar.menu-open .nav-logo,
+    #navbar.menu-open .text-white { color: #f5f2ec !important; }
+    #navbar.menu-open svg { color: #f5f2ec !important; }
 
     .nav-link { position: relative; }
     .nav-link::after {
@@ -113,23 +123,54 @@
       background: linear-gradient(to right, transparent, #c8a96e40, transparent);
       margin: 0 2.5rem;
     }
+
+    /* ── Bump leggero (+10%) per label piccole su desktop (>=1024px) ── */
+    @media (min-width: 1024px) {
+      .text-xs       { font-size: 0.825rem; }   /* 12px → ~13.2px */
+      .text-\[10px\] { font-size: 11px; }
+      .text-\[9px\]  { font-size: 10px; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased">
 
   <!-- NAV -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-10 py-6">
-    <a href="home.html" class="nav-logo font-serif text-sm tracking-widest uppercase text-white">Fulvio Nicolosi</a>
-    <div class="flex items-center gap-10">
-      <a href="home.html#bio"     class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="concerts.html"     class="nav-link text-xs tracking-widest uppercase text-white opacity-100 transition-opacity border-b border-white/40 pb-0.5">Concerti</a>
-      <a href="home.html#gallery" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
-      <a href="home.html#contact" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-6">
+    <a href="home.html" class="nav-logo font-serif text-sm tracking-widest uppercase text-white relative z-50">Fulvio Nicolosi</a>
+
+    <div class="hidden md:flex items-center gap-10">
+      <a href="home.html#bio"     data-i18n="navBio"      class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="calendar.html"     data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-white opacity-100 transition-opacity border-b border-white/40 pb-0.5">Calendario</a>
+      <a href="gallery.html"      data-i18n="navGallery"  class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Galleria</a>
+      <a href="home.html#contact" data-i18n="navContatti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
-    <div class="flex items-center gap-4">
-      <a href="#" aria-label="Instagram">
+
+    <div class="hidden md:flex items-center gap-4">
+      <!-- Language Switch -->
+      <button id="lang-switch" onclick="toggleLang()" class="font-sans text-[10px] tracking-widest uppercase text-white opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5" aria-label="Cambia lingua">
+        <span id="lang-label">EN</span>
+      </button>
+      <span class="text-white/20 text-xs">|</span>
+      <a href="https://www.instagram.com/fulvio.nicolosi/" aria-label="Instagram" target="_blank" rel="noopener">
         <svg class="w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </a>
+    </div>
+
+    <button id="mobile-menu-btn" class="md:hidden text-white relative z-50 focus:outline-none" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
+      <a href="home.html#bio"     data-i18n="mobileBio"      class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
+      <a href="calendar.html"     data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
+      <a href="gallery.html"      data-i18n="mobileGallery"  class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
+      <a href="home.html#contact" data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+      <div class="flex items-center gap-6 mt-8">
+        <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-cream/60 hover:text-cream transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Instagram</a>
+      </div>
+      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
     </div>
   </nav>
 
@@ -137,13 +178,13 @@
   <div class="relative h-[38vh] min-h-[260px] bg-[#151619] flex items-end overflow-hidden">
     <div class="absolute inset-0 opacity-20" style="background: radial-gradient(ellipse at 60% 50%, #c8a96e22 0%, transparent 70%);"></div>
     <div class="page-hero px-10 md:px-20 pb-14 max-w-6xl w-full mx-auto">
-      <h1 class="font-serif text-cream font-light leading-none" style="font-size: clamp(3rem, 8vw, 6rem);">Concerti</h1>
+      <h1 data-i18n="pageTitle" class="font-serif text-cream font-light leading-none" style="font-size: clamp(3rem, 8vw, 6rem);">Calendario</h1>
     </div>
   </div>
 
   <!-- UPCOMING -->
   <section class="reveal pt-24 pb-16 px-10 md:px-20 max-w-6xl mx-auto">
-    <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-12">Upcoming</p>
+    <p data-i18n="upcomingLabel" class="font-sans text-xs tracking-ultra uppercase text-muted mb-12">Prossimi concerti</p>
     <div id="upcoming-list" class="flex flex-col divide-y divide-charcoal/10">
       <div class="skeleton-row py-7 grid grid-cols-12 gap-4 items-center">
         <div class="col-span-1"><div class="skeleton h-8 w-10"></div></div>
@@ -162,7 +203,7 @@
       </div>
     </div>
     <div id="upcoming-error" class="hidden py-6">
-      <p class="font-sans text-sm text-muted">Could not load concerts. Please try again later.</p>
+      <p data-i18n="loadError" class="font-sans text-sm text-muted">Non è stato possibile caricare i concerti. Riprova più tardi.</p>
     </div>
   </section>
 
@@ -172,7 +213,7 @@
   <!-- PAST -->
   <section class="reveal pt-24 pb-32 px-10 md:px-20 max-w-6xl mx-auto">
     <div class="flex items-baseline justify-between mb-12">
-      <p class="font-sans text-xs tracking-ultra uppercase text-muted">Concerti Passati</p>
+      <p data-i18n="pastLabel" class="font-sans text-xs tracking-ultra uppercase text-muted">Concerti passati</p>
       <div id="year-filters" class="flex items-center gap-4 flex-wrap justify-end"></div>
     </div>
     <div id="past-list" class="flex flex-col divide-y divide-charcoal/10">
@@ -193,7 +234,7 @@
       </div>
     </div>
     <div id="past-error" class="hidden py-6">
-      <p class="font-sans text-sm text-muted">Could not load past concerts.</p>
+      <p data-i18n="loadErrorPast" class="font-sans text-sm text-muted">Non è stato possibile caricare i concerti passati.</p>
     </div>
   </section>
 
@@ -202,12 +243,12 @@
   <section class="reveal py-20 md:py-28 px-6 md:px-20">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
       <div>
-        <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-3">Collaborations & Inquiries</p>
-        <h2 class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">For concerts engagements <br> or other artistic endeavours</h2>
+        <p data-i18n="ctaLabel" class="font-sans text-xs tracking-ultra uppercase text-muted mb-3">Collaborazioni & Richieste</p>
+        <h2 data-i18n="ctaTitle" class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">Per concerti <br> o altri progetti artistici</h2>
       </div>
       <div class="flex flex-col sm:flex-row gap-4">
         <a href="home.html#contact" class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-charcoal border border-charcoal px-8 py-4 hover:bg-charcoal hover:text-cream transition-colors">
-          Contact me
+          <span data-i18n="ctaButton">Contattami</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
@@ -233,11 +274,13 @@
       visibile: 'Checkbox',
     };
 
+    const MESI_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
     const MESI_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     function formatDate(dateStr) {
       const d = new Date(dateStr + 'T00:00:00');
-      return { giorno: String(d.getDate()).padStart(2, '0'), mese: MESI_EN[d.getMonth()], anno: d.getFullYear() };
+      const months = currentLang === 'en' ? MESI_EN : MESI_IT;
+      return { giorno: String(d.getDate()).padStart(2, '0'), mese: months[d.getMonth()], anno: d.getFullYear() };
     }
 
     function renderConcert(concert, isPast = false) {
@@ -251,6 +294,8 @@
 
       // GOLD TOUCH 1 — day number gold only for upcoming
       const dayColor = isPast ? 'text-charcoal' : 'day-upcoming';
+
+      const t = translations[currentLang];
 
       return `
         <div class="concert-row ${isPast ? 'past' : ''} py-7 grid grid-cols-12 gap-4 items-center">
@@ -266,10 +311,10 @@
             ${!isPast && biglietti
               ? `<a href="${biglietti}" target="_blank" rel="noopener"
                     class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">
-                    Biglietti
+                    ${t.concertTickets}
                  </a>`
               : !isPast
-                ? `<span class="font-sans text-xs tracking-widest uppercase text-muted">Soon</span>`
+                ? `<span class="font-sans text-xs tracking-widest uppercase text-muted">${t.concertSoon}</span>`
                 : ''
             }
           </div>
@@ -277,11 +322,22 @@
     }
 
     let allPastConcerts = [];
+    let allUpcomingConcerts = [];
+    let currentYearFilter = null; // null = "All"
+
+    function renderUpcomingList() {
+      const list = document.getElementById('upcoming-list');
+      const t = translations[currentLang];
+      list.innerHTML = allUpcomingConcerts.length === 0
+        ? `<p class="font-sans text-sm text-muted py-8">${t.upcomingEmpty}</p>`
+        : allUpcomingConcerts.map(c => renderConcert(c, false)).join('');
+    }
 
     function renderPastList(concerts) {
       const list = document.getElementById('past-list');
+      const t = translations[currentLang];
       list.innerHTML = concerts.length === 0
-        ? '<p class="font-sans text-sm text-muted py-8">No past concerts to show.</p>'
+        ? `<p class="font-sans text-sm text-muted py-8">${t.pastEmpty}</p>`
         : concerts.map(c => renderConcert(c, true)).join('');
     }
 
@@ -291,24 +347,38 @@
           .map(d => new Date(d + 'T00:00:00').getFullYear())
       )].sort((a, b) => b - a);
 
-      if (years.length <= 1) return;
-
       const container = document.getElementById('year-filters');
       container.innerHTML = '';
 
+      if (years.length <= 1) return;
+
+      const t = translations[currentLang];
+
       const allBtn = document.createElement('button');
-      allBtn.textContent = 'All';
+      allBtn.textContent = t.filterAll;
+      allBtn.dataset.role = 'all';
       // GOLD TOUCH 3 — active filter uses gold underline
-      allBtn.className = 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b text-charcoal border-accent';
-      allBtn.onclick = () => { renderPastList(allPastConcerts); updateFilterButtons(null); };
+      const isAllActive = currentYearFilter === null;
+      allBtn.className = isAllActive
+        ? 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b text-charcoal border-accent'
+        : 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b border-transparent text-muted hover:text-charcoal';
+      allBtn.onclick = () => {
+        currentYearFilter = null;
+        renderPastList(allPastConcerts);
+        updateFilterButtons(null);
+      };
       container.appendChild(allBtn);
 
       years.forEach(year => {
         const btn = document.createElement('button');
         btn.textContent = year;
         btn.dataset.year = year;
-        btn.className = 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b border-transparent text-muted hover:text-charcoal';
+        const isActive = currentYearFilter === year;
+        btn.className = isActive
+          ? 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b text-charcoal border-accent'
+          : 'font-sans text-xs tracking-widest uppercase pb-0.5 transition-colors border-b border-transparent text-muted hover:text-charcoal';
         btn.onclick = () => {
+          currentYearFilter = year;
           const filtered = allPastConcerts.filter(c => {
             const d = c.properties[PROPS.data]?.date?.start;
             return d && new Date(d + 'T00:00:00').getFullYear() === year;
@@ -322,10 +392,12 @@
 
     function updateFilterButtons(activeYear) {
       document.querySelectorAll('#year-filters button').forEach(btn => {
-        const isActive = activeYear === null ? btn.textContent === 'All' : btn.dataset.year == activeYear;
+        const isActive = activeYear === null
+          ? btn.dataset.role === 'all'
+          : btn.dataset.year == activeYear;
         if (isActive) {
           btn.classList.remove('text-muted', 'border-transparent');
-          btn.classList.add('text-charcoal', 'border-accent'); // gold underline on active
+          btn.classList.add('text-charcoal', 'border-accent');
         } else {
           btn.classList.remove('text-charcoal', 'border-accent');
           btn.classList.add('text-muted', 'border-transparent');
@@ -352,12 +424,8 @@
         });
         if (!res.ok) throw new Error();
         const data = await res.json();
-        list.innerHTML = '';
-        if (data.results.length === 0) {
-          list.innerHTML = '<p class="font-sans text-sm text-muted py-8">No upcoming concerts at the moment.</p>';
-          return;
-        }
-        list.innerHTML = data.results.map(c => renderConcert(c, false)).join('');
+        allUpcomingConcerts = data.results;
+        renderUpcomingList();
       } catch {
         list.innerHTML = '';
         error.classList.remove('hidden');
@@ -383,30 +451,194 @@
         });
         if (!res.ok) throw new Error();
         const data = await res.json();
-        list.innerHTML = '';
         allPastConcerts = data.results;
         if (data.results.length === 0) {
-          list.innerHTML = '<p class="font-sans text-sm text-muted py-8">No past concerts yet.</p>';
+          list.innerHTML = `<p class="font-sans text-sm text-muted py-8">${translations[currentLang].pastEmpty}</p>`;
           return;
         }
         buildYearFilters(data.results);
-        renderPastList(data.results);
+        // Honour current year filter (or All)
+        const toShow = currentYearFilter === null
+          ? allPastConcerts
+          : allPastConcerts.filter(c => {
+              const d = c.properties[PROPS.data]?.date?.start;
+              return d && new Date(d + 'T00:00:00').getFullYear() === currentYearFilter;
+            });
+        renderPastList(toShow);
       } catch {
         list.innerHTML = '';
         error.classList.remove('hidden');
       }
     }
 
+    // ── NAVBAR SCROLL ──
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+    window.addEventListener('scroll', () => {
+      if (!navbar.classList.contains('menu-open')) {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+      }
+    });
 
+    // ── REVEAL ON SCROLL ──
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
     }, { threshold: 0.08 });
     reveals.forEach(el => observer.observe(el));
 
-    document.addEventListener('DOMContentLoaded', () => { loadUpcoming(); loadPast(); });
+    // ── MOBILE MENU ──
+    const mobileBtn  = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.contains('opacity-100');
+        if (isOpen) {
+          mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+          mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+          navbar.classList.remove('menu-open');
+          document.body.style.overflow = '';
+        } else {
+          mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+          mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+          navbar.classList.add('menu-open');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+      // Close on link click
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+          mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+          navbar.classList.remove('menu-open');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+
+    // ── TRANSLATIONS ──
+    const translations = {
+      it: {
+        navBio:        'Bio',
+        navConcerti:   'Calendario',
+        navGallery:    'Galleria',
+        navContatti:   'Contatti',
+        mobileBio:     'Bio',
+        mobileConcerti:'Calendario',
+        mobileGallery: 'Galleria',
+        mobileContatti:'Contatti',
+        pageTitle:     'Calendario',
+        upcomingLabel: 'Prossimi concerti',
+        pastLabel:     'Concerti passati',
+        upcomingEmpty: 'Nessun concerto in programma al momento.',
+        pastEmpty:     'Nessun concerto passato da mostrare.',
+        loadError:     'Non è stato possibile caricare i concerti. Riprova più tardi.',
+        loadErrorPast: 'Non è stato possibile caricare i concerti passati.',
+        concertTickets:'Biglietti',
+        concertSoon:   'Presto',
+        filterAll:     'Tutti',
+        ctaLabel:      'Collaborazioni & Richieste',
+        ctaTitle:      'Per concerti <br> o altri progetti artistici',
+        ctaButton:     'Contattami',
+      },
+      en: {
+        navBio:        'Bio',
+        navConcerti:   'Calendar',
+        navGallery:    'Gallery',
+        navContatti:   'Contact',
+        mobileBio:     'Bio',
+        mobileConcerti:'Calendar',
+        mobileGallery: 'Gallery',
+        mobileContatti:'Contact',
+        pageTitle:     'Calendar',
+        upcomingLabel: 'Upcoming concerts',
+        pastLabel:     'Past concerts',
+        upcomingEmpty: 'No upcoming concerts at the moment.',
+        pastEmpty:     'No past concerts to show.',
+        loadError:     'Could not load concerts. Please try again later.',
+        loadErrorPast: 'Could not load past concerts.',
+        concertTickets:'Tickets',
+        concertSoon:   'Soon',
+        filterAll:     'All',
+        ctaLabel:      'Collaborations & Inquiries',
+        ctaTitle:      'For concert engagements <br> or other artistic endeavours',
+        ctaButton:     'Contact me',
+      }
+    };
+
+    // ── Lingua persistente tra le pagine ──
+    let currentLang = 'it';
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved === 'it' || saved === 'en') currentLang = saved;
+    } catch (e) { /* localStorage non disponibile */ }
+
+    function applyLang(lang) {
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) {
+          if (key === 'ctaTitle') {
+            el.innerHTML = t[key];
+          } else {
+            el.textContent = t[key];
+          }
+        }
+      });
+
+      // Page title
+      document.title = t.pageTitle + ' — Fulvio Nicolosi';
+
+      // Lang switch labels (show opposite)
+      const opposite = lang === 'it' ? 'EN' : 'IT';
+      const label = document.getElementById('lang-label');
+      const labelMobile = document.getElementById('lang-switch-mobile');
+      if (label) label.textContent = opposite;
+      if (labelMobile) labelMobile.textContent = opposite;
+
+      // Re-render concert lists with new month names + button labels
+      if (allUpcomingConcerts && allUpcomingConcerts.length >= 0) {
+        const list = document.getElementById('upcoming-list');
+        // Only re-render if it's not still loading skeletons
+        if (list && !list.querySelector('.skeleton-row')) {
+          renderUpcomingList();
+        }
+      }
+      if (allPastConcerts && allPastConcerts.length > 0) {
+        const list = document.getElementById('past-list');
+        if (list && !list.querySelector('.skeleton-row')) {
+          buildYearFilters(allPastConcerts);
+          const toShow = currentYearFilter === null
+            ? allPastConcerts
+            : allPastConcerts.filter(c => {
+                const d = c.properties[PROPS.data]?.date?.start;
+                return d && new Date(d + 'T00:00:00').getFullYear() === currentYearFilter;
+              });
+          renderPastList(toShow);
+        }
+      }
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'it' ? 'en' : 'it';
+      try { localStorage.setItem('siteLang', currentLang); } catch (e) {}
+      applyLang(currentLang);
+    }
+
+    // Sync tra schede aperte
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siteLang' && (e.newValue === 'it' || e.newValue === 'en') && e.newValue !== currentLang) {
+        currentLang = e.newValue;
+        applyLang(currentLang);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLang(currentLang);
+      loadUpcoming();
+      loadPast();
+    });
   </script>
 </body>
 </html>

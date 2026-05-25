@@ -175,6 +175,13 @@
     #navbar.scrolled-dark .nav-link::after {
       background: #f5f2ec;
     }
+
+    /* ── Bump leggero (+10%) per label piccole su desktop (>=1024px) ── */
+    @media (min-width: 1024px) {
+      .text-xs       { font-size: 0.825rem; }   /* 12px → ~13.2px */
+      .text-\[10px\] { font-size: 11px; }
+      .text-\[9px\]  { font-size: 10px; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -191,8 +198,8 @@
     
     <div class="hidden md:flex items-center gap-10">
       <a href="#bio"      data-i18n="navBio" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="#calendar" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
-      <a href="gallery.html" data-i18n="navGallery" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
+      <a href="#calendar" data-i18n="navConcerti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Calendario</a>
+      <a href="gallery.html" data-i18n="navGallery" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Galleria</a>
       <a href="#contact"  data-i18n="navContatti" class="nav-link text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
     
@@ -215,8 +222,8 @@
 
     <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
       <a href="#bio"         data-i18n="mobileBio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
-      <a href="#calendar"    data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Concerti</a>
-      <a href="gallery.html" data-i18n="mobileGallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Gallery</a>
+      <a href="#calendar"    data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
+      <a href="gallery.html" data-i18n="mobileGallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
       <a href="#contact"     data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
       
       <div class="flex items-center gap-6 mt-8">
@@ -338,7 +345,7 @@
       <p class="font-sans text-sm text-muted">Non è stato possibile caricare i concerti. Riprova più tardi.</p>
     </div>
     <div class="mt-12">
-      <a href="concerts.html" data-i18n="concertsMore" class="font-sans text-sm tracking-ultra uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">Vedi di più →</a>
+      <a href="calendar.html" data-i18n="concertsMore" class="font-sans text-sm tracking-ultra uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors">Vedi di più →</a>
     </div>
   </section>
 
@@ -671,12 +678,12 @@
     const translations = {
       it: {
         navBio: 'Bio',
-        navConcerti: 'Concerti',
-        navGallery: 'Gallery',
+        navConcerti: 'Calendario',
+        navGallery: 'Galleria',
         navContatti: 'Contatti',
         mobileBio: 'Bio',
-        mobileConcerti: 'Concerti',
-        mobileGallery: 'Gallery',
+        mobileConcerti: 'Calendario',
+        mobileGallery: 'Galleria',
         mobileContatti: 'Contatti',
         heroSub: 'Italian pianist',
         scrollLabel: 'Scorri',
@@ -711,11 +718,11 @@
       },
       en: {
         navBio: 'Bio',
-        navConcerti: 'Concerts',
+        navConcerti: 'Calendar',
         navGallery: 'Gallery',
         navContatti: 'Contact',
         mobileBio: 'Bio',
-        mobileConcerti: 'Concerts',
+        mobileConcerti: 'Calendar',
         mobileGallery: 'Gallery',
         mobileContatti: 'Contact',
         heroSub: 'Italian pianist',
@@ -751,7 +758,15 @@
       }
     };
 
+    // ── Lingua persistente tra le pagine ──
+    // Leggiamo la lingua salvata nel browser (localStorage). Se non c'è
+    // o è un valore non valido, il default è 'it'. La chiave 'siteLang'
+    // è la stessa in tutte le pagine del sito, così la scelta si propaga.
     let currentLang = 'it';
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved === 'it' || saved === 'en') currentLang = saved;
+    } catch (e) { /* localStorage non disponibile (modalità privata, ecc.) */ }
 
     function applyLang(lang) {
       const t = translations[lang];
@@ -788,8 +803,24 @@
 
     function toggleLang() {
       currentLang = currentLang === 'it' ? 'en' : 'it';
+      // Salva la scelta nel browser così le altre pagine partiranno
+      // direttamente nella lingua scelta dall'utente.
+      try { localStorage.setItem('siteLang', currentLang); } catch (e) {}
       applyLang(currentLang);
     }
+
+    // Sync tra schede aperte: se l'utente cambia lingua in un'altra
+    // scheda dello stesso sito, anche questa si aggiorna in tempo reale.
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siteLang' && (e.newValue === 'it' || e.newValue === 'en') && e.newValue !== currentLang) {
+        currentLang = e.newValue;
+        applyLang(currentLang);
+      }
+    });
+
+    // Applichiamo subito la lingua corrente: se il browser aveva salvato
+    // 'en', i contenuti vengono tradotti senza che l'utente clicchi nulla.
+    applyLang(currentLang);
 
     // QUOTE SLIDER
     let currentSlide = 0;

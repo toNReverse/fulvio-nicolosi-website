@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fulvio Nicolosi — Biography</title>
+  <title>Bio — Fulvio Nicolosi</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -112,6 +112,15 @@
     #navbar.menu-open { background-color:transparent!important; backdrop-filter:none!important; border-bottom:none!important; }
     #navbar.menu-open .nav-text { color:#f5f2ec!important; opacity:.7; }
     #navbar.menu-open .logo-text { color:#f5f2ec!important; }
+    #navbar.menu-open svg { color:#f5f2ec!important; }
+    #navbar.menu-open .ig-icon { color:#f5f2ec!important; }
+
+    /* ── Bump leggero (+10%) per label piccole su desktop (>=1024px) ── */
+    @media (min-width: 1024px) {
+      .text-xs       { font-size: 0.825rem; }   /* 12px → ~13.2px */
+      .text-\[10px\] { font-size: 11px; }
+      .text-\[9px\]  { font-size: 10px; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-charcoal selection:text-cream">
@@ -120,13 +129,18 @@
     <a href="home.html" class="logo-text font-serif text-sm tracking-widest uppercase text-charcoal relative z-50">Fulvio Nicolosi</a>
 
     <div class="hidden md:flex items-center gap-10">
-      <a href="bio.html" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="index.html#calendar" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Concerti</a>
-      <a href="gallery.html" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Gallery</a>
-      <a href="home.html#contact" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+      <a href="bio.html"            data-i18n="navBio"      class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="calendar.html"     data-i18n="navConcerti" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Calendario</a>
+      <a href="gallery.html"        data-i18n="navGallery"  class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Galleria</a>
+      <a href="home.html#contact"   data-i18n="navContatti" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
 
     <div class="hidden md:flex items-center gap-4">
+      <!-- Language Switch -->
+      <button id="lang-switch" onclick="toggleLang()" class="nav-text font-sans text-[10px] tracking-widest uppercase text-charcoal opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5" aria-label="Cambia lingua">
+        <span id="lang-label">EN</span>
+      </button>
+      <span class="text-charcoal/20 text-xs">|</span>
       <a href="https://www.instagram.com/fulvio.nicolosi/" aria-label="Instagram" target="_blank" rel="noopener">
         <svg class="ig-icon w-4 h-4 text-charcoal opacity-50 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </a>
@@ -139,61 +153,62 @@
     </button>
 
     <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
-      <a href="index.html#bio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
-      <a href="index.html#calendar" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
-      <a href="gallery.html" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Gallery</a>
-      <a href="home.html#contact" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+      <a href="bio.html"            data-i18n="mobileBio"      class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
+      <a href="calendar.html"     data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
+      <a href="gallery.html"        data-i18n="mobileGallery"  class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
+      <a href="home.html#contact"   data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
       <div class="flex items-center gap-6 mt-8">
         <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-cream/60 hover:text-cream transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Instagram</a>
       </div>
+      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
     </div>
   </nav>
 
   <main class="pt-40 md:pt-48 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
     
     <header class="mb-16 md:mb-20 fade-in-up">
-      <h1 class="font-serif text-5xl md:text-[5.5rem] font-light text-charcoal leading-none tracking-tight mb-8">
-        Biography
+      <h1 data-i18n="pageH1" class="font-serif text-5xl md:text-[5.5rem] font-light text-charcoal leading-none tracking-tight mb-8">
+        Biografia
       </h1>
       <div class="w-16 h-px bg-charcoal/30"></div>
     </header>
 
     <article class="flex flex-col gap-8 md:gap-10">
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.1s;">
-        Fulvio Nicolosi (2003) is an Italian pianist whose activity spans solo and chamber performance. He graduated with highest honours, distinction, and special mention from the Conservatorio Vincenzo Bellini in 2022, and in 2024 completed the Master’s Degree in Concert Piano at the Conservatorio Francesco Morlacchi, again with highest honours, distinction, and special mention, under the guidance of Massimo Spada.
+      <p data-i18n="bioP1" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.1s;">
+        Fulvio Nicolosi (2003) è un pianista italiano la cui attività spazia dal repertorio solistico a quello cameristico. Si è diplomato con il massimo dei voti, lode e menzione speciale al Conservatorio Vincenzo Bellini nel 2022, e nel 2024 ha conseguito il Master’s Degree in Concert Piano al Conservatorio Francesco Morlacchi, anche in questo caso con il massimo dei voti, lode e menzione speciale, sotto la guida di Massimo Spada.
       </p>
 
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.2s;">
-        He has taken part in masterclasses with internationally renowned pianists including Benedetto Lupo, Beatrice Rana, Pietro De Maria, Jeffrey Swann, Roberto Cappello and Bruno Canino. In 2024 he was admitted to the advanced courses of the Accademia Musicale Chigiana, where he studied with Lilya Zilberstein and received a scholarship for outstanding young musicians. In 2025 he was selected for courses led by Norma Fisher at the Royal Academy of Music and later gave performances in London.
+      <p data-i18n="bioP2" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.2s;">
+        Ha partecipato a masterclass con pianisti di fama internazionale, tra cui Benedetto Lupo, Beatrice Rana, Pietro De Maria, Jeffrey Swann, Roberto Cappello e Bruno Canino. Nel 2024 è stato ammesso ai corsi di alto perfezionamento dell’Accademia Musicale Chigiana, dove ha studiato con Lilya Zilberstein ricevendo una borsa di studio per giovani musicisti di talento. Nel 2025 è stato selezionato per i corsi tenuti da Norma Fisher alla Royal Academy of Music, esibendosi successivamente a Londra.
       </p>
 
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.3s;">
-        Winner of more than twenty prizes in national and international piano competitions, Nicolosi was awarded Third Prize at Premio Venezia 2023 at Teatro La Fenice. He has appeared in important concert seasons across Italy as both soloist and chamber musician, including the concert series of Amici della Musica in Perugia, Palermo and Catania, the Lyceum Club, Piano City Milano, and the Festival della Tuscia. He has collaborated regularly with Quartetto Katàne since 2023, and also performs in Duo Nicolosi with his brother, the cellist Giulio Nicolosi; the duo inspired Domenico Famà’s Schizo-Valse for cello and piano, published in 2022 by Da Vinci Publishing.
+      <p data-i18n="bioP3" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.3s;">
+        Vincitore di oltre venti premi in concorsi pianistici nazionali e internazionali, Nicolosi ha conseguito il Terzo Premio al Premio Venezia 2023 al Teatro La Fenice. Si è esibito in importanti stagioni concertistiche italiane sia come solista sia come camerista, tra cui le rassegne degli Amici della Musica di Perugia, Palermo e Catania, il Lyceum Club, Piano City Milano e il Festival della Tuscia. Collabora regolarmente con il Quartetto Katàne dal 2023 e si esibisce nel Duo Nicolosi con il fratello, il violoncellista Giulio Nicolosi; il duo ha ispirato la Schizo-Valse per violoncello e pianoforte di Domenico Famà, pubblicata nel 2022 da Da Vinci Publishing.
       </p>
 
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.4s;">
-        In July 2023 he made his orchestral debut in Mozart’s Piano Concerto No. 20 in D minor, K.466, with the Camerata Polifonica Siciliana. In May 2025 he performed Mozart’s Piano Concerto No. 23 in A major, K.488, sharing the stage with clarinetist Sergio Pires, principal clarinet of the London Symphony Orchestra.
+      <p data-i18n="bioP4" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.4s;">
+        Nel luglio 2023 ha debuttato con orchestra nel Concerto per pianoforte n. 20 in re minore K.466 di Mozart con la Camerata Polifonica Siciliana. Nel maggio 2025 ha eseguito il Concerto per pianoforte n. 23 in la maggiore K.488 di Mozart, condividendo il palco con il clarinettista Sergio Pires, primo clarinetto della London Symphony Orchestra.
       </p>
 
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.5s;">
-        His artistry has also attracted critical attention. Writing in Suonare News, musicologist and pianist Luca Ciammarughi observed that “Fulvio Nicolosi left a distinctive impression through his performance of the rare Trenet/Weissenberg chansons, interpreted with virtuosity and captivating sprezzatura.” In a broadcast for Radio Classica, Ciammarughi further described him as “a talent whose artistic resources promise remarkable possibilities” during which one of Nicolosi’s recordings was featured. He collaborates with The Keyboard Charitable Trust, joining the foundation’s recital circuit dedicated to some of the most promising young keyboard talents.
+      <p data-i18n="bioP5" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.5s;">
+        La sua arte ha attratto anche l’attenzione della critica. Sulle pagine di Suonare News, il musicologo e pianista Luca Ciammarughi ha osservato che “Fulvio Nicolosi ha lasciato un segno particolare grazie alla proposta delle rare chansons Trenet/Weissenberg, interpretate con virtuosismo e affascinante sprezzatura.” In una trasmissione per Radio Classica, Ciammarughi lo ha inoltre descritto come “un talento le cui risorse artistiche promettono possibilità straordinarie”, durante la quale è stata trasmessa una sua registrazione. Collabora con The Keyboard Charitable Trust, partecipando al circuito di recital della fondazione dedicato ai giovani talenti tastieristici più promettenti.
       </p>
 
-      <p class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.6s;">
-        He later entered the Klaipėda Piano Masters under Gintaras Januševičius, performing in major Lithuanian cities and receiving a scholarship to attend the invitation-only International Piano Academy Feuerwerk in Einbeck, Germany. Recent recital programmes range from Baroque and late-Romantic literature to twentieth-century and virtuosic transcription repertoire, with upcoming engagements including an appearance for Fundación Eutherpe in León, Spain (May 2026). He currently continues his artistic development at the International Piano Academy Lake Como, the prestigious institution founded by William Grant Naboré, with Martha Argerich as Honorary President, widely regarded as one of the world’s leading centres for advanced pianistic training.
+      <p data-i18n="bioP6" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.6s;">
+        Successivamente è entrato al Klaipėda Piano Masters sotto la guida di Gintaras Januševičius, esibendosi nelle principali città lituane e ricevendo una borsa di studio per partecipare, su invito esclusivo, alla International Piano Academy Feuerwerk di Einbeck, in Germania. I suoi recenti programmi da recital spaziano dal repertorio barocco e tardoromantico fino al Novecento e alle trascrizioni virtuosistiche, con prossimi impegni che includono un’apparizione per la Fundación Eutherpe a León, Spagna (maggio 2026). Attualmente prosegue la sua formazione artistica all’International Piano Academy Lake Como, la prestigiosa istituzione fondata da William Grant Naboré con Martha Argerich come Presidente Onoraria, ampiamente riconosciuta come uno dei principali centri al mondo per il perfezionamento pianistico.
       </p>
 
     </article>
 
     <div class="mt-24 pt-16 border-t border-charcoal/10 flex flex-col md:flex-row gap-12 md:gap-24 fade-in-up" style="animation-delay: 0.8s;">
       <div class="flex flex-col items-start gap-5">
-        <p class="font-sans text-xs tracking-ultra uppercase text-muted">Press Kit</p>
-        <a href="#" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
-          Download Short Bio (PDF)
+        <p data-i18n="pressKitLabel" class="font-sans text-xs tracking-ultra uppercase text-muted">Press Kit</p>
+        <a href="files/ShortBio.pdf" download="Fulvio_Nicolosi_Short_Bio.pdf" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
+          <span data-i18n="pressKitShort">Scarica Bio Breve (PDF)</span>
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         </a>
-        <a href="#" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
-          Download Full Bio (PDF)
+        <a href="files/LongBio.pdf" download="Fulvio_Nicolosi_Long_Bio.pdf" class="font-sans text-xs tracking-widest uppercase text-charcoal border-b border-charcoal/30 hover:border-charcoal pb-0.5 transition-colors flex items-center gap-2">
+          <span data-i18n="pressKitFull">Scarica Bio Completa (PDF)</span>
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
         </a>
       </div>
@@ -201,95 +216,15 @@
     </div>
   </main>
 
-  <section id="formazione" class="reveal bg-[#151619] py-24 md:py-32 px-6 md:px-20">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-10 md:gap-20">
-      <div class="md:col-span-4">
-        <p class="font-sans text-xs tracking-ultra uppercase text-cream/40 mb-4">Formazione</p>
-        <h2 class="font-serif text-3xl md:text-4xl font-light text-cream leading-snug">
-          Un percorso<br>tra le grandi scuole
-        </h2>
-      </div>
-      <div class="md:col-span-8 flex flex-col gap-10">
-
-        <div class="timeline-item">
-          <p class="font-sans text-[10px] tracking-widest uppercase text-accent mb-1">2017 – 2022</p>
-          <p class="font-serif text-xl font-light text-cream mb-1">Conservatorio Vincenzo Bellini, Catania</p>
-          <p class="font-sans text-xs leading-relaxed text-cream/50">Diploma accademico di I livello. Votazione: 110/110, lode e menzione d'onore.</p>
-        </div>
-
-        <div class="timeline-item">
-          <p class="font-sans text-[10px] tracking-widest uppercase text-accent mb-1">2022 – 2024</p>
-          <p class="font-serif text-xl font-light text-cream mb-1">Conservatorio Francesco Morlacchi, Perugia</p>
-          <p class="font-sans text-xs leading-relaxed text-cream/50">Master’s Degree in Concert Piano sotto la guida di Massimo Spada. 110/110, lode e menzione.</p>
-        </div>
-
-        <div class="timeline-item">
-          <p class="font-sans text-[10px] tracking-widest uppercase text-accent mb-1">2024</p>
-          <p class="font-serif text-xl font-light text-cream mb-1">Accademia Musicale Chigiana, Siena</p>
-          <p class="font-sans text-xs leading-relaxed text-cream/50">Corsi di alto perfezionamento con Lilya Zilberstein. Borsa di studio per giovani talenti.</p>
-        </div>
-
-        <div class="timeline-item">
-          <p class="font-sans text-[10px] tracking-widest uppercase text-accent mb-1">Oggi</p>
-          <p class="font-serif text-xl font-light text-cream mb-1">International Piano Academy Lake Como</p>
-          <p class="font-sans text-xs leading-relaxed text-cream/50">Perfezionamento presso una delle istituzioni più prestigiose al mondo.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="reveal py-20 md:py-28 px-6 md:px-20">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-10 md:gap-20">
-      <div class="md:col-span-4">
-        <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-4">Repertoire</p>
-        <h2 class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">
-          From Baroque<br>to Contemporary
-        </h2>
-        <p class="font-sans text-xs leading-relaxed text-muted mt-6">
-          A repertoire built with historical rigor and intellectual curiosity, with a focus on 20th-century literature and virtuosic transcriptions.
-        </p>
-      </div>
-      <div class="md:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-px bg-charcoal/10">
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">Baroque</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">Bach · Scarlatti · Händel</p>
-        </div>
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">Classicism</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">Mozart · Haydn · Beethoven</p>
-        </div>
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">Romanticism</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">Schubert · Chopin · Schumann · Brahms</p>
-        </div>
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">Late 19th c.</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">Debussy · Ravel · Scriabin</p>
-        </div>
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">20th Century</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">Casella · Weissenberg · Famà</p>
-        </div>
-        <div class="bg-cream px-6 py-8">
-          <p class="font-sans text-[9px] tracking-widest uppercase text-accent mb-3">Contemporary</p>
-          <p class="font-serif text-sm text-charcoal leading-relaxed">New Commissions · Transcriptions</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="border-t border-charcoal/10 mx-6 md:mx-20"></div>
-
   <section class="reveal py-20 md:py-28 px-6 md:px-20">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
       <div>
-        <p class="font-sans text-xs tracking-ultra uppercase text-muted mb-3">Collaborations & Inquiries</p>
-        <h2 class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">For concerts engagements <br> or other artistic endeavours</h2>
+        <p data-i18n="ctaLabel" class="font-sans text-xs tracking-ultra uppercase text-muted mb-3">Collaborazioni & Richieste</p>
+        <h2 data-i18n="ctaTitle" class="font-serif text-3xl md:text-4xl font-light text-charcoal leading-snug">Per concerti <br> o altri progetti artistici</h2>
       </div>
       <div class="flex flex-col sm:flex-row gap-4">
         <a href="home.html#contact" class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-charcoal border border-charcoal px-8 py-4 hover:bg-charcoal hover:text-cream transition-colors">
-          Contact me
+          <span data-i18n="ctaButton">Contattami</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
@@ -304,6 +239,108 @@
   </footer>
 
   <script>
+    // ── TRANSLATIONS ──
+    const translations = {
+      it: {
+        navBio: 'Bio',
+        navConcerti: 'Calendario',
+        navGallery: 'Galleria',
+        navContatti: 'Contatti',
+        mobileBio: 'Bio',
+        mobileConcerti: 'Calendario',
+        mobileGallery: 'Galleria',
+        mobileContatti: 'Contatti',
+        pageH1: 'Biografia',
+        bioP1: 'Fulvio Nicolosi (2003) è un pianista italiano la cui attività spazia dal repertorio solistico a quello cameristico. Si è diplomato con il massimo dei voti, lode e menzione speciale al Conservatorio Vincenzo Bellini nel 2022, e nel 2024 ha conseguito il Master’s Degree in Concert Piano al Conservatorio Francesco Morlacchi, anche in questo caso con il massimo dei voti, lode e menzione speciale, sotto la guida di Massimo Spada.',
+        bioP2: 'Ha partecipato a masterclass con pianisti di fama internazionale, tra cui Benedetto Lupo, Beatrice Rana, Pietro De Maria, Jeffrey Swann, Roberto Cappello e Bruno Canino. Nel 2024 è stato ammesso ai corsi di alto perfezionamento dell’Accademia Musicale Chigiana, dove ha studiato con Lilya Zilberstein ricevendo una borsa di studio per giovani musicisti di talento. Nel 2025 è stato selezionato per i corsi tenuti da Norma Fisher alla Royal Academy of Music, esibendosi successivamente a Londra.',
+        bioP3: 'Vincitore di oltre venti premi in concorsi pianistici nazionali e internazionali, Nicolosi ha conseguito il Terzo Premio al Premio Venezia 2023 al Teatro La Fenice. Si è esibito in importanti stagioni concertistiche italiane sia come solista sia come camerista, tra cui le rassegne degli Amici della Musica di Perugia, Palermo e Catania, il Lyceum Club, Piano City Milano e il Festival della Tuscia. Collabora regolarmente con il Quartetto Katàne dal 2023 e si esibisce nel Duo Nicolosi con il fratello, il violoncellista Giulio Nicolosi; il duo ha ispirato la Schizo-Valse per violoncello e pianoforte di Domenico Famà, pubblicata nel 2022 da Da Vinci Publishing.',
+        bioP4: 'Nel luglio 2023 ha debuttato con orchestra nel Concerto per pianoforte n. 20 in re minore K.466 di Mozart con la Camerata Polifonica Siciliana. Nel maggio 2025 ha eseguito il Concerto per pianoforte n. 23 in la maggiore K.488 di Mozart, condividendo il palco con il clarinettista Sergio Pires, primo clarinetto della London Symphony Orchestra.',
+        bioP5: 'La sua arte ha attratto anche l’attenzione della critica. Sulle pagine di Suonare News, il musicologo e pianista Luca Ciammarughi ha osservato che “Fulvio Nicolosi ha lasciato un segno particolare grazie alla proposta delle rare chansons Trenet/Weissenberg, interpretate con virtuosismo e affascinante sprezzatura.” In una trasmissione per Radio Classica, Ciammarughi lo ha inoltre descritto come “un talento le cui risorse artistiche promettono possibilità straordinarie”, durante la quale è stata trasmessa una sua registrazione. Collabora con The Keyboard Charitable Trust, partecipando al circuito di recital della fondazione dedicato ai giovani talenti tastieristici più promettenti.',
+        bioP6: 'Successivamente è entrato al Klaipėda Piano Masters sotto la guida di Gintaras Januševičius, esibendosi nelle principali città lituane e ricevendo una borsa di studio per partecipare, su invito esclusivo, alla International Piano Academy Feuerwerk di Einbeck, in Germania. I suoi recenti programmi da recital spaziano dal repertorio barocco e tardoromantico fino al Novecento e alle trascrizioni virtuosistiche, con prossimi impegni che includono un’apparizione per la Fundación Eutherpe a León, Spagna (maggio 2026). Attualmente prosegue la sua formazione artistica all’International Piano Academy Lake Como, la prestigiosa istituzione fondata da William Grant Naboré con Martha Argerich come Presidente Onoraria, ampiamente riconosciuta come uno dei principali centri al mondo per il perfezionamento pianistico.',
+        pressKitLabel: 'Press Kit',
+        pressKitShort: 'Scarica Bio Breve (PDF)',
+        pressKitFull: 'Scarica Bio Completa (PDF)',
+        ctaLabel: 'Collaborazioni & Richieste',
+        ctaTitle: 'Per concerti <br> o altri progetti artistici',
+        ctaButton: 'Contattami',
+      },
+      en: {
+        navBio: 'Bio',
+        navConcerti: 'Calendar',
+        navGallery: 'Gallery',
+        navContatti: 'Contact',
+        mobileBio: 'Bio',
+        mobileConcerti: 'Calendar',
+        mobileGallery: 'Gallery',
+        mobileContatti: 'Contact',
+        pageH1: 'Biography',
+        bioP1: 'Fulvio Nicolosi (2003) is an Italian pianist whose activity spans solo and chamber performance. He graduated with highest honours, distinction, and special mention from the Conservatorio Vincenzo Bellini in 2022, and in 2024 completed the Master’s Degree in Concert Piano at the Conservatorio Francesco Morlacchi, again with highest honours, distinction, and special mention, under the guidance of Massimo Spada.',
+        bioP2: 'He has taken part in masterclasses with internationally renowned pianists including Benedetto Lupo, Beatrice Rana, Pietro De Maria, Jeffrey Swann, Roberto Cappello and Bruno Canino. In 2024 he was admitted to the advanced courses of the Accademia Musicale Chigiana, where he studied with Lilya Zilberstein and received a scholarship for outstanding young musicians. In 2025 he was selected for courses led by Norma Fisher at the Royal Academy of Music and later gave performances in London.',
+        bioP3: 'Winner of more than twenty prizes in national and international piano competitions, Nicolosi was awarded Third Prize at Premio Venezia 2023 at Teatro La Fenice. He has appeared in important concert seasons across Italy as both soloist and chamber musician, including the concert series of Amici della Musica in Perugia, Palermo and Catania, the Lyceum Club, Piano City Milano, and the Festival della Tuscia. He has collaborated regularly with Quartetto Katàne since 2023, and also performs in Duo Nicolosi with his brother, the cellist Giulio Nicolosi; the duo inspired Domenico Famà’s Schizo-Valse for cello and piano, published in 2022 by Da Vinci Publishing.',
+        bioP4: 'In July 2023 he made his orchestral debut in Mozart’s Piano Concerto No. 20 in D minor, K.466, with the Camerata Polifonica Siciliana. In May 2025 he performed Mozart’s Piano Concerto No. 23 in A major, K.488, sharing the stage with clarinetist Sergio Pires, principal clarinet of the London Symphony Orchestra.',
+        bioP5: 'His artistry has also attracted critical attention. Writing in Suonare News, musicologist and pianist Luca Ciammarughi observed that “Fulvio Nicolosi left a distinctive impression through his performance of the rare Trenet/Weissenberg chansons, interpreted with virtuosity and captivating sprezzatura.” In a broadcast for Radio Classica, Ciammarughi further described him as “a talent whose artistic resources promise remarkable possibilities” during which one of Nicolosi’s recordings was featured. He collaborates with The Keyboard Charitable Trust, joining the foundation’s recital circuit dedicated to some of the most promising young keyboard talents.',
+        bioP6: 'He later entered the Klaipėda Piano Masters under Gintaras Januševičius, performing in major Lithuanian cities and receiving a scholarship to attend the invitation-only International Piano Academy Feuerwerk in Einbeck, Germany. Recent recital programmes range from Baroque and late-Romantic literature to twentieth-century and virtuosic transcription repertoire, with upcoming engagements including an appearance for Fundación Eutherpe in León, Spain (May 2026). He currently continues his artistic development at the International Piano Academy Lake Como, the prestigious institution founded by William Grant Naboré, with Martha Argerich as Honorary President, widely regarded as one of the world’s leading centres for advanced pianistic training.',
+        pressKitLabel: 'Press Kit',
+        pressKitShort: 'Download Short Bio (PDF)',
+        pressKitFull: 'Download Full Bio (PDF)',
+        ctaLabel: 'Collaborations & Inquiries',
+        ctaTitle: 'For concert engagements <br> or other artistic endeavours',
+        ctaButton: 'Contact me',
+      }
+    };
+
+    // ── Lingua persistente tra le pagine ──
+    let currentLang = 'it';
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved === 'it' || saved === 'en') currentLang = saved;
+    } catch (e) { /* localStorage non disponibile */ }
+
+    function applyLang(lang) {
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) {
+          // Use innerHTML for keys that contain HTML markup (br tags)
+          if (key === 'ctaTitle') {
+            el.innerHTML = t[key];
+          } else {
+            el.textContent = t[key];
+          }
+        }
+      });
+
+      // Page title
+      document.title = t.pageH1 + ' — Fulvio Nicolosi';
+
+      // Lang switch labels (show opposite)
+      const opposite = lang === 'it' ? 'EN' : 'IT';
+      const label = document.getElementById('lang-label');
+      const labelMobile = document.getElementById('lang-switch-mobile');
+      if (label) label.textContent = opposite;
+      if (labelMobile) labelMobile.textContent = opposite;
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'it' ? 'en' : 'it';
+      try { localStorage.setItem('siteLang', currentLang); } catch (e) {}
+      applyLang(currentLang);
+    }
+
+    // Sync tra schede aperte
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siteLang' && (e.newValue === 'it' || e.newValue === 'en') && e.newValue !== currentLang) {
+        currentLang = e.newValue;
+        applyLang(currentLang);
+      }
+    });
+
+    // Initial apply
+    document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
+
+    // ── NAVBAR SCROLL ──
     const navbar = document.getElementById('navbar');
     // Seleziona le sezioni con lo sfondo scuro
     const darkSections = document.querySelectorAll('.bg-\\[\\#151619\\]');
