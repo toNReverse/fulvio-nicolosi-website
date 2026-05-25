@@ -478,6 +478,9 @@
   .h-\[38vh\] {
     height: 38vh;
   }
+  .h-\[60vh\] {
+    height: 60vh;
+  }
   .h-full {
     height: 100%;
   }
@@ -489,6 +492,9 @@
   }
   .min-h-\[260px\] {
     min-height: 260px;
+  }
+  .min-h-\[440px\] {
+    min-height: 440px;
   }
   .min-h-\[500px\] {
     min-height: 500px;
@@ -837,6 +843,9 @@
   .pt-16 {
     padding-top: calc(var(--spacing) * 16);
   }
+  .pt-20 {
+    padding-top: calc(var(--spacing) * 20);
+  }
   .pt-24 {
     padding-top: calc(var(--spacing) * 24);
   }
@@ -1022,6 +1031,9 @@
   .opacity-20 {
     opacity: 20%;
   }
+  .opacity-25 {
+    opacity: 25%;
+  }
   .opacity-50 {
     opacity: 50%;
   }
@@ -1166,6 +1178,11 @@
       margin-inline: calc(var(--spacing) * 20);
     }
   }
+  .md\:mb-16 {
+    @media (width >= 48rem) {
+      margin-bottom: calc(var(--spacing) * 16);
+    }
+  }
   .md\:mb-20 {
     @media (width >= 48rem) {
       margin-bottom: calc(var(--spacing) * 20);
@@ -1279,6 +1296,11 @@
   .md\:py-32 {
     @media (width >= 48rem) {
       padding-block: calc(var(--spacing) * 32);
+    }
+  }
+  .md\:pt-28 {
+    @media (width >= 48rem) {
+      padding-top: calc(var(--spacing) * 28);
     }
   }
   .md\:pt-40 {

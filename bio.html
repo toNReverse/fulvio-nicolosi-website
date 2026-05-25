@@ -47,7 +47,7 @@
     .nav-link { position: relative; }
     .nav-link::after {
       content:''; position:absolute; bottom:-2px; left:0;
-      width:0; height:1px; background:#1a1a18;
+      width:0; height:1px; background: currentColor;
       transition: width 0.25s ease;
     }
     .nav-link:hover::after { width:100%; }
@@ -56,19 +56,13 @@
       background-color: rgba(245,242,236,0.95);
       backdrop-filter: blur(8px);
       padding-top: 1rem; padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(26,26,24,0.06);
+      border-bottom: 1px solid rgba(26,26,24,0.08);
     }
-    #navbar.scrolled-dark {
-      background-color: rgba(21,22,25,0.95);
-      backdrop-filter: blur(8px);
-      padding-top: 1rem; padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(245,242,236,0.05);
-    }
-    #navbar.scrolled-dark .nav-text { color: #f5f2ec !important; opacity: 0.7; }
-    #navbar.scrolled-dark .logo-text { color: #f5f2ec !important; }
-    #navbar.scrolled-dark .nav-link::after { background: #f5f2ec; }
-    #navbar.scrolled-dark .ig-icon,
-    #navbar.scrolled-dark .fb-icon { color: #f5f2ec !important; }
+    #navbar.scrolled .nav-text,
+    #navbar.scrolled .logo-text { color: #1a1a18 !important; }
+    #navbar.scrolled .ig-icon,
+    #navbar.scrolled .fb-icon { color: #1a1a18 !important; }
+    #navbar.scrolled #mobile-menu-btn { color: #1a1a18 !important; }
 
     /* ── Animazioni ── */
     .fade-in-up {
@@ -140,31 +134,31 @@
 </head>
 <body class="font-sans antialiased selection:bg-charcoal selection:text-cream">
 
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-6 transition-all duration-300">  
-    <a href="index.html" class="logo-text font-serif text-sm tracking-widest uppercase text-charcoal relative z-50">Fulvio Nicolosi</a>
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-6 transition-all duration-300">
+    <a href="index.html" class="logo-text font-serif text-sm tracking-widest uppercase text-white relative z-50">Fulvio Nicolosi</a>
 
     <div class="hidden md:flex items-center gap-10">
-      <a href="bio.html"            data-i18n="navBio"      class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Bio</a>
-      <a href="calendar.html"     data-i18n="navConcerti" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Calendario</a>
-      <a href="gallery.html"        data-i18n="navGallery"  class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Galleria</a>
-      <a href="index.html#contact"   data-i18n="navContatti" class="nav-link nav-text text-xs tracking-widest uppercase text-charcoal opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
+      <a href="bio.html"            data-i18n="navBio"      class="nav-link nav-text text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Bio</a>
+      <a href="calendar.html"     data-i18n="navConcerti" class="nav-link nav-text text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Calendario</a>
+      <a href="gallery.html"        data-i18n="navGallery"  class="nav-link nav-text text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Galleria</a>
+      <a href="index.html#contact"   data-i18n="navContatti" class="nav-link nav-text text-xs tracking-widest uppercase text-white opacity-70 hover:opacity-100 transition-opacity">Contatti</a>
     </div>
 
     <div class="hidden md:flex items-center gap-4">
       <!-- Language Switch -->
-      <button id="lang-switch" onclick="toggleLang()" class="nav-text font-sans text-[10px] tracking-widest uppercase text-charcoal opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5" aria-label="Cambia lingua">
+      <button id="lang-switch" onclick="toggleLang()" class="nav-text font-sans text-[10px] tracking-widest uppercase text-white opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5" aria-label="Cambia lingua">
         <span id="lang-label">EN</span>
       </button>
-      <span class="text-charcoal/20 text-xs">|</span>
+      <span class="text-white/20 text-xs">|</span>
       <a href="https://www.instagram.com/fulvio.nicolosi/" aria-label="Instagram" target="_blank" rel="noopener">
-        <svg class="ig-icon w-4 h-4 text-charcoal opacity-50 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <svg class="ig-icon w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       </a>
       <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" aria-label="Facebook" target="_blank" rel="noopener">
-        <svg class="fb-icon w-4 h-4 text-charcoal opacity-50 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <svg class="fb-icon w-4 h-4 text-white opacity-60 hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       </a>
     </div>
 
-    <button id="mobile-menu-btn" class="md:hidden text-charcoal relative z-50 focus:outline-none" aria-label="Menu">
+    <button id="mobile-menu-btn" class="md:hidden text-white relative z-50 focus:outline-none" aria-label="Menu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
@@ -184,14 +178,20 @@
     <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
   </div>
 
-  <main class="pt-40 md:pt-48 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
-    
-    <header class="mb-16 md:mb-20 fade-in-up">
-      <h1 data-i18n="pageH1" class="font-serif text-5xl md:text-[5.5rem] font-light text-charcoal leading-none tracking-tight mb-8">
-        Biografia
-      </h1>
+  <!-- PAGE HERO -->
+  <div class="relative h-[60vh] min-h-[440px] flex items-end overflow-hidden bg-[#151619]">
+    <img src="./img/img5.jpg" alt="" class="absolute inset-0 w-full h-full object-cover object-center z-0">
+    <div class="absolute inset-0 bg-charcoal/55 z-0"></div>
+    <div class="absolute inset-0 opacity-25 z-0" style="background: radial-gradient(ellipse at 60% 50%, #c8a96e33 0%, transparent 70%);"></div>
+    <div class="fade-in-up px-10 md:px-20 pb-14 max-w-6xl w-full mx-auto relative z-10">
+      <h1 data-i18n="pageH1" class="font-serif text-cream font-light leading-none" style="font-size: clamp(3rem, 8vw, 6rem);">Biografia</h1>
+    </div>
+  </div>
+
+  <main class="pt-20 md:pt-28 pb-24 px-6 md:px-12 max-w-5xl mx-auto">
+    <div class="mb-12 md:mb-16 fade-in-up">
       <div class="w-16 h-px bg-charcoal/30"></div>
-    </header>
+    </div>
 
     <article class="flex flex-col gap-8 md:gap-10">
       <p data-i18n="bioP1" class="font-serif text-justify hyphens-auto text-lg md:text-xl leading-loose text-charcoal/90 font-light fade-in-up" style="animation-delay: 0.1s;">
@@ -382,28 +382,9 @@
 
     // ── NAVBAR SCROLL ──
     const navbar = document.getElementById('navbar');
-    // Seleziona le sezioni con lo sfondo scuro
-    const darkSections = document.querySelectorAll('.bg-\\[\\#151619\\]');
-
     window.addEventListener('scroll', () => {
-      if (navbar.classList.contains('menu-open')) return;
-
-      const navH = navbar.offsetHeight;
-      let overDark = false;
-
-      darkSections.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.top <= navH && rect.bottom > 0) overDark = true;
-      });
-
-      if (overDark) {
-        navbar.classList.add('scrolled-dark');
-        navbar.classList.remove('scrolled');
-      } else if (window.scrollY > 60) {
-        navbar.classList.add('scrolled');
-        navbar.classList.remove('scrolled-dark');
-      } else {
-        navbar.classList.remove('scrolled', 'scrolled-dark');
+      if (!navbar.classList.contains('menu-open')) {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
       }
     });
 
