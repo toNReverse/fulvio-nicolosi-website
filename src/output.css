@@ -481,6 +481,9 @@
   .h-\[60vh\] {
     height: 60vh;
   }
+  .h-\[72vh\] {
+    height: 72vh;
+  }
   .h-full {
     height: 100%;
   }
@@ -498,6 +501,9 @@
   }
   .min-h-\[500px\] {
     min-height: 500px;
+  }
+  .min-h-\[520px\] {
+    min-height: 520px;
   }
   .w-2 {
     width: calc(var(--spacing) * 2);
