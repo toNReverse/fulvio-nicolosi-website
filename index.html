@@ -182,6 +182,19 @@
       .text-\[10px\] { font-size: 11px; }
       .text-\[9px\]  { font-size: 10px; }
     }
+
+    /* ── Menu mobile: stagger reveal dei link ── */
+    #mobile-menu .mobile-link {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #mobile-menu.is-open .mobile-link { opacity: 1; transform: translateY(0); }
+    #mobile-menu.is-open .mobile-link:nth-of-type(1) { transition-delay: 0.15s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(2) { transition-delay: 0.22s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(3) { transition-delay: 0.29s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(4) { transition-delay: 0.36s; }
+    body.menu-locked { overflow: hidden; }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -223,19 +236,20 @@
       </svg>
     </button>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
-      <a href="#bio"         data-i18n="mobileBio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
-      <a href="#calendar"    data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
-      <a href="gallery.html" data-i18n="mobileGallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
-      <a href="#contact"     data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
-      
-      <div class="flex items-center gap-6 mt-8">
-        <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" class="text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Facebook</a>
-      </div>
-      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
-    </div>
   </nav>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
+    <a href="#bio"         data-i18n="mobileBio" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
+    <a href="#calendar"    data-i18n="mobileConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
+    <a href="gallery.html" data-i18n="mobileGallery" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
+    <a href="#contact"     data-i18n="mobileContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+
+    <div class="flex items-center gap-6 mt-8">
+      <a href="https://www.instagram.com/fulvio.nicolosi/" class="font-sans text-xs tracking-widest uppercase text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" class="font-sans text-xs tracking-widest uppercase text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Facebook</a>
+    </div>
+    <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
+  </div>
 
   <section class="relative h-screen overflow-hidden">
     <img src="./img/img7.jpg" alt="Fulvio Nicolosi - Italian Pianist" class="absolute inset-0 w-full h-full object-cover object-center z-0 hero-img">
@@ -499,25 +513,25 @@
     const mobileLinks = document.querySelectorAll('.mobile-link');
     const menuIconPath = mobileMenuBtn.querySelector('path');
 
+    const openMenu = () => {
+      mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+      mobileMenu.classList.add('is-open');
+      navbar.classList.add('menu-open');
+      document.body.classList.add('menu-locked');
+      menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+    };
+    const closeMenu = () => {
+      mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+      mobileMenu.classList.remove('is-open');
+      navbar.classList.remove('menu-open');
+      document.body.classList.remove('menu-locked');
+      menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+    };
     mobileMenuBtn.addEventListener('click', () => {
-      const isClosed = mobileMenu.classList.contains('opacity-0');
-      if (isClosed) {
-        mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
-        navbar.classList.add('menu-open');
-        menuIconPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-      } else {
-        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-        navbar.classList.remove('menu-open');
-        menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-      }
+      if (mobileMenu.classList.contains('opacity-0')) openMenu();
+      else closeMenu();
     });
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-        navbar.classList.remove('menu-open');
-        menuIconPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-      });
-    });
+    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
     // NAV SCROLL EFFECT
     const contactSection = document.getElementById('contact');

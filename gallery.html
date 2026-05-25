@@ -211,6 +211,19 @@
       .text-\[10px\] { font-size: 11px; }
       .text-\[9px\]  { font-size: 10px; }
     }
+
+    /* ── Menu mobile: stagger reveal dei link ── */
+    #mobile-menu .mobile-link {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    #mobile-menu.is-open .mobile-link { opacity: 1; transform: translateY(0); }
+    #mobile-menu.is-open .mobile-link:nth-of-type(1) { transition-delay: 0.15s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(2) { transition-delay: 0.22s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(3) { transition-delay: 0.29s; }
+    #mobile-menu.is-open .mobile-link:nth-of-type(4) { transition-delay: 0.36s; }
+    body.menu-locked { overflow: hidden; }
   </style>
 </head>
 <body class="font-sans antialiased">
@@ -267,18 +280,19 @@
       </svg>
     </button>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-cream flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
-      <a href="bio.html"           data-i18n="navBio"      class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Bio</a>
-      <a href="calendar.html" data-i18n="navConcerti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Calendario</a>
-      <a href="gallery.html"       data-i18n="navGallery"  class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Galleria</a>
-      <a href="index.html#contact"  data-i18n="navContatti" class="mobile-link font-serif text-3xl text-charcoal hover:text-accent transition-colors">Contatti</a>
-      <div class="flex items-center gap-6 mt-8">
-        <a href="https://www.instagram.com/fulvio.nicolosi/" class="text-charcoal/60 hover:text-charcoal transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" class="text-charcoal/60 hover:text-charcoal transition-colors font-sans text-xs tracking-widest uppercase" target="_blank" rel="noopener">Facebook</a>
-      </div>
-      <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-charcoal/50 hover:text-charcoal transition-colors mt-2" id="lang-switch-mobile">EN</button>
-    </div>
   </nav>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#151619] flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-300 z-40">
+    <a href="bio.html"           data-i18n="navBio"      class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Bio</a>
+    <a href="calendar.html"      data-i18n="navConcerti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Calendario</a>
+    <a href="gallery.html"       data-i18n="navGallery"  class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Galleria</a>
+    <a href="index.html#contact" data-i18n="navContatti" class="mobile-link font-serif text-3xl text-cream hover:text-accent transition-colors">Contatti</a>
+    <div class="flex items-center gap-6 mt-8">
+      <a href="https://www.instagram.com/fulvio.nicolosi/" class="font-sans text-xs tracking-widest uppercase text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" class="font-sans text-xs tracking-widest uppercase text-cream/60 hover:text-cream transition-colors" target="_blank" rel="noopener">Facebook</a>
+    </div>
+    <button onclick="toggleLang()" class="font-sans text-xs tracking-widest uppercase text-cream/50 hover:text-cream transition-colors mt-2" id="lang-switch-mobile">EN</button>
+  </div>
 
   <!-- FILTER TABS -->
   <header class="pt-32 md:pt-40 pb-10 px-3 md:px-6">
@@ -455,23 +469,25 @@
     const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
     const iconPath = btn.querySelector('path');
-    btn.addEventListener('click', () => {
-      const closed = menu.classList.contains('opacity-0');
-      if (closed) {
-        menu.classList.remove('opacity-0','pointer-events-none');
-        navbar.classList.add('menu-open');
-        iconPath.setAttribute('d','M6 18L18 6M6 6l12 12');
-      } else {
-        menu.classList.add('opacity-0','pointer-events-none');
-        navbar.classList.remove('menu-open');
-        iconPath.setAttribute('d','M4 6h16M4 12h16M4 18h16');
-      }
-    });
-    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+    const openMenu = () => {
+      menu.classList.remove('opacity-0','pointer-events-none');
+      menu.classList.add('is-open');
+      navbar.classList.add('menu-open');
+      document.body.classList.add('menu-locked');
+      iconPath.setAttribute('d','M6 18L18 6M6 6l12 12');
+    };
+    const closeMenu = () => {
       menu.classList.add('opacity-0','pointer-events-none');
+      menu.classList.remove('is-open');
       navbar.classList.remove('menu-open');
+      document.body.classList.remove('menu-locked');
       iconPath.setAttribute('d','M4 6h16M4 12h16M4 18h16');
-    }));
+    };
+    btn.addEventListener('click', () => {
+      if (menu.classList.contains('opacity-0')) openMenu();
+      else closeMenu();
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', closeMenu));
 
     // ── Scroll reveal ──
     const reveals = document.querySelectorAll('.reveal');
