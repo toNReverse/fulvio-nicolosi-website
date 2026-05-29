@@ -321,7 +321,7 @@
       <div>
         <p data-i18n="biographyLabel" class="font-sans text-xs tracking-ultra uppercase text-cream/50 mb-6">Biografia</p>
         <h2 data-i18n="bioTitle" class="font-serif text-3xl md:text-4xl font-light leading-snug text-cream mb-8">
-          Pianista italiano.<br>Premiato a livello internazionale.
+          Pianista italiano.<br>
         </h2>
       </div>
       <div class="flex flex-col items-start">
@@ -862,7 +862,7 @@
     function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
     function resetInterval() {
       clearInterval(slideInterval);
-      slideInterval = setInterval(nextSlide, 6000);
+      slideInterval = setInterval(nextSlide, 8000);
     }
     resetInterval();
   </script>
