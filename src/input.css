@@ -1,2 +1,17 @@
 @import "tailwindcss";
 
+/* Tema custom del sito (prima viveva nel blocco tailwind.config inline,
+   che funzionava solo con il CDN di Tailwind). In Tailwind v4 i token del
+   tema si definiscono come variabili CSS dentro @theme e diventano utility. */
+@theme {
+  --font-sans: "Montserrat", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+
+  --color-cream: #f5f2ec;
+  --color-charcoal: #1a1a18;
+  --color-muted: #8a8a84;
+  --color-accent: #c8a96e;
+
+  --tracking-widest: 0.25em;
+  --tracking-ultra: 0.4em;
+}
