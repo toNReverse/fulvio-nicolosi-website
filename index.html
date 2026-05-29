@@ -645,7 +645,16 @@
     }, { threshold: 0.1 });
     reveals.forEach(section => observer.observe(section));
 
-    document.addEventListener('DOMContentLoaded', loadConcerts);
+    // Riposiziona sull'ancora dopo il caricamento async: i concerti/immagini spostano le sezioni e lo scroll arriverebbe corto.
+    function scrollToHash() {
+      const id = location.hash.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { loadConcerts().then(scrollToHash); });
+    window.addEventListener('load', scrollToHash);
 
     // WEB3FORMS
     const form = document.getElementById('contact-form');
