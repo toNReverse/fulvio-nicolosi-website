@@ -1,8 +1,20 @@
-# Fulvio Nicolosi — Official Website
+<h1 align="center">Fulvio Nicolosi — Official Website</h1>
 
-The official website of Italian concert pianist **Fulvio Nicolosi**: a bilingual static site with a live concert agenda managed through Notion.
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages" />
+  <img src="https://img.shields.io/badge/Cloudflare_Workers-F38020?style=for-the-badge&logo=cloudflareworkers&logoColor=white" alt="Cloudflare Workers" />
+  <img src="https://img.shields.io/badge/Notion_API-000000?style=for-the-badge&logo=notion&logoColor=white" alt="Notion API" />
+  <img src="https://img.shields.io/badge/Web3Forms-3B82F6?style=for-the-badge&logo=maildotru&logoColor=white" alt="Web3Forms" />
+</p>
 
-**Live:** https://fulvionicolosi.com
+<p align="center">The official website of Italian concert pianist <strong>Fulvio Nicolosi</strong> — a bilingual static site with a live concert agenda managed through Notion.</p>
+
+<p align="center"><strong>Live:</strong> <a href="https://fulvionicolosi.com">fulvionicolosi.com</a></p>
 
 ## Preview
 
