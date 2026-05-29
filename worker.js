@@ -17,7 +17,7 @@ export default {
       return new Response(JSON.stringify(data), {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://tuosito.com', // ← cambia con il tuo dominio
+          'Access-Control-Allow-Origin': '*',
         }
       });
     }
