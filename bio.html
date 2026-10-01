@@ -131,6 +131,41 @@
     #mobile-menu.is-open .mobile-link:nth-of-type(3) { transition-delay: 0.29s; }
     #mobile-menu.is-open .mobile-link:nth-of-type(4) { transition-delay: 0.36s; }
     body.menu-locked { overflow: hidden; }
+
+    /* Credito nel footer: al passaggio del mouse il testo lascia il posto
+       all'email e il click la copia. I due testi occupano la stessa cella di
+       griglia, cosi' la riga non cambia mai larghezza. */
+    .credit {
+      font: inherit;
+      letter-spacing: inherit;
+      /* I browser forzano text-transform:none sui <button>: senza questo il
+         maiuscolo ereditato dal paragrafo del footer andrebbe perso. */
+      text-transform: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      padding: 0;
+    }
+    .credit-swap { display: inline-grid; }
+    .credit-swap > span {
+      grid-area: 1 / 1;
+      transition: opacity 0.3s ease;
+    }
+    .credit-alt { opacity: 0; }
+    .credit:hover .credit-name,
+    .credit:focus-visible .credit-name,
+    .credit.is-copied .credit-name { opacity: 0; }
+    .credit:hover .credit-alt,
+    .credit:focus-visible .credit-alt,
+    .credit.is-copied .credit-alt { opacity: 1; }
+    .credit-status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body class="font-sans antialiased selection:bg-charcoal selection:text-cream">
@@ -272,7 +307,7 @@
         <a href="https://www.facebook.com/profile.php?id=61589537517695&amp;name=xhp_nt__fb__action__open_user" target="_blank" rel="noopener" class="font-sans text-xs text-muted tracking-widest uppercase hover:text-charcoal transition-colors">Facebook</a>
       </div>
     </div>
-    <p class="font-sans text-[10px] text-muted/60 tracking-[0.2em] uppercase text-center mt-6">Design &amp; development by Marco Sapienza</p>
+    <p class="font-sans text-[10px] text-muted/60 tracking-[0.2em] uppercase text-center mt-6"><button type="button" class="credit" aria-label="Copia l'indirizzo email di Marco Sapienza"><span class="credit-swap"><span class="credit-name">Design &amp; development by Marco Sapienza</span><span class="credit-alt" aria-hidden="true"></span></span><span class="credit-status" role="status"></span></button></p>
   </footer>
 
   <script>
@@ -417,6 +452,54 @@
       else closeMenu();
     });
     document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', closeMenu));
+  </script>
+  <script>
+    // Credito nel footer: click (o tap) copia l'email negli appunti.
+    (function () {
+      const btn = document.querySelector('.credit');
+      if (!btn) return;
+      const alt = btn.querySelector('.credit-alt');
+      const status = btn.querySelector('.credit-status');
+      // Assemblata a runtime per non lasciarla in chiaro nell'HTML.
+      const email = ['mark04sap', 'gmail.com'].join('@');
+      alt.textContent = email;
+      let timer;
+
+      function confirmCopy() {
+        clearTimeout(timer);
+        alt.textContent = 'Email copiata \u2713';
+        status.textContent = 'Email copiata negli appunti';
+        btn.classList.add('is-copied');
+        timer = setTimeout(() => {
+          btn.classList.remove('is-copied');
+          status.textContent = '';
+          setTimeout(() => { alt.textContent = email; }, 300);
+        }, 1800);
+      }
+
+      // Contesti non sicuri (es. apertura del file in locale) e browser vecchi.
+      function legacyCopy() {
+        const ta = document.createElement('textarea');
+        ta.value = email;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        if (ok) confirmCopy();
+        else window.location.href = 'mailto:' + email;
+      }
+
+      btn.addEventListener('click', () => {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(email).then(confirmCopy, legacyCopy);
+        } else {
+          legacyCopy();
+        }
+      });
+    })();
   </script>
 </body>
 </html>
