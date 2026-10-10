@@ -38,12 +38,13 @@
 - **Image gallery** with WebP delivery for display and full-resolution originals available for download; swipe navigation on mobile.
 - **Responsive design**, animated mobile menu, hero imagery, video sections, rotating quotes, and scroll-reveal animations.
 - **Press kit** — short and full biographies (IT/EN) as downloadable PDFs.
+- **SEO** — per-page meta descriptions, canonical URLs, Open Graph and Twitter cards, `sitemap.xml`, `robots.txt`, and Person structured data (JSON-LD).
 
 ## Tech stack
 
 | Area | Technology |
 |------|------------|
-| Markup & styling | HTML5, Tailwind CSS (CDN) |
+| Markup & styling | HTML5, Tailwind CSS — v4 compiled on the home page, v3 via CDN on the other three |
 | Interactions | Vanilla JavaScript (no framework) |
 | Hosting | Cloudflare Pages |
 | Content / CMS | Notion API |
@@ -72,26 +73,55 @@ This keeps the secret token out of the client and out of the repository — only
 ├── gallery.html        # Photo gallery
 ├── worker.js           # Cloudflare Worker: Notion API proxy
 ├── favicon.svg
+├── robots.txt
+├── sitemap.xml
+├── googleb773b7620e152a89.html   # Search Console ownership — do not remove
+├── src/
+│   ├── input.css       # Tailwind v4 source and theme (home page only)
+│   └── output.css      # Compiled stylesheet loaded by index.html
 ├── img/
 │   ├── img-original/   # Full-resolution images (downloads)
-│   └── img-web/        # Optimized WebP for display
+│   ├── img-web/        # Optimized WebP for display
+│   └── og-image.jpg    # 1200×630 social sharing preview
 └── press-kit/          # Biography PDFs (IT/EN)
 ```
 
 ## Local development
 
-The site is fully static and loads Tailwind via CDN — no build step required.
+The site is static — no bundler, no framework. Serve the folder with any static
+server, or simply open a page in the browser:
 
 ```bash
-# serve the folder with any static server, e.g.
 npx serve .
-# or simply open index.html in a browser
 ```
+
+Styling is split, and this matters when editing classes:
+
+- `bio.html`, `calendar.html`, `gallery.html` pull Tailwind from the CDN and
+  configure the theme inline, so changes are live on reload — no build step.
+- `index.html` loads the compiled `src/output.css` instead, so **any new class
+  used there needs a rebuild**, otherwise it simply will not exist:
+
+```bash
+npm install          # once
+npm run build:css    # regenerates src/output.css from src/input.css
+```
+
+Site-wide rules and theme tokens added to `src/input.css` therefore apply to the
+home page only; the other three need the same change in their inline config.
+Migrating them to the compiled stylesheet is open work.
 
 ## Deployment
 
 - **Site:** Cloudflare Pages connected to this repository (branch `main`, no build command, output directory `/`).
 - **Worker:** deployed separately with a `NOTION_TOKEN` secret; the Notion database is shared with the integration.
+
+Cloudflare Pages serves `src/output.css` as committed, so remember to run
+`npm run build:css` and commit the result before pushing changes to the home page.
+
+The canonical host is `https://fulvionicolosi.com` (no `www`); `sitemap.xml` and
+every `<link rel="canonical">` use the extensionless paths (`/bio`, `/calendar`,
+`/gallery`) that Cloudflare actually serves — the `.html` forms answer with a 308.
 
 ## Credits
 
