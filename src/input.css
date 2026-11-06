@@ -15,3 +15,15 @@
   --tracking-widest: 0.25em;
   --tracking-ultra: 0.4em;
 }
+
+/* Il preflight di Tailwind v3 includeva `button, [role="button"] { cursor: pointer }`;
+   in v4 quella regola e' stata rimossa, quindi i bottoni tornano al cursore di
+   default del browser (la freccia). Qui ripristiniamo il comportamento v3, che e'
+   anche quello che le pagine ancora servite dal CDN v3 hanno gia'. I bottoni
+   disabilitati restano esclusi: ci pensa `disabled:cursor-not-allowed`. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
